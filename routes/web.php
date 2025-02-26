@@ -11,6 +11,10 @@ Route::view('contact', 'index')->name('contact');
 Route::view('blog', 'index')->name('blog');
 Route::view('faq', 'index')->name('faq');
 
+Route::view('mix', 'mix')->name('mix');
+Route::view('cw', 'cw')->name('cw');
+Route::view('tournament', 'tournament')->name('tournament');
+
 Route::get('/profile', function (){
     dd(auth()->user());
 })->name('profile.index');
