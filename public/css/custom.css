@@ -1,0 +1,5 @@
+.steam-login-btn{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
