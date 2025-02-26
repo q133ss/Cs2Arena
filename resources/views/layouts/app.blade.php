@@ -44,30 +44,17 @@
                             <nav id="mobile-menu">
                                 <ul>
                                     <li class="has-sub">
-                                        <a href="index.html">Home</a>
+                                        <a href="index.html">Играть</a>
                                         <ul>
-                                            <li><a href="index.html">Home Page 01</a></li>
-                                            <li><a href="index-2.html">Home Page 02</a></li>
-                                            <li><a href="index-3.html">Home Page 03</a></li>
+                                            <li><a href="index.html">Микс</a></li>
+                                            <li><a href="index-2.html">Битва кланов</a></li>
+                                            <li><a href="index-3.html">Турниры</a></li>
 
                                         </ul>
                                     </li>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li class="has-sub"><a href="gallery.html">Pages</a>
-                                        <ul>
-                                            <li><a href="gallery.html">Gallery</a></li>
-                                            <li><a href="team.html">Team</a></li>
-                                            <li><a href="faq.html">Faq</a></li>
-                                            <li><a href="game.html">Our Game</a></li>
-                                            <li><a href="matchese.html">Matchese</a>
-                                            </li>
-                                            <li><a href="matchese-details.html">Matchese Details</a></li>
-                                            <li><a href="live-streaming.html">Live Streaming</a></li> <li><a href="error.html">404 Page</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li><a href="blog.html">Blog</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="about.html">Рейтинг кланов</a></li>
+                                    <li><a href="blog.html">Турниры</a></li>
+                                    <li><a href="{{route('profile.index')}}">Профиль</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -162,41 +149,22 @@
                             <img src="img/logo/f_logo.png" alt="img">
                         </div>
                         <div class="footer-link">
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                            Ощути конкурентную игру во всей ее красе, поднимаясь по рейтингу. Принимай участие в ранговых матчах, сбалансированных на основе навыков. Попробуй командные лиги, клубы и многое другое!
                         </div>
-                        <div class="f-contact mt-20">
-                            <ul>
-                                <li>
-                                    <i class="icon fal fa-map-marker-alt"></i>
-                                    <span>Address :66 Broklyn Street,  United States of America</span>
-                                </li>
-                                <li>
-                                    <i class="icon far fa-clock"></i>
-                                    <span>Phone : +123 456 78900 </span>
-                                </li>
-                                <li>
-                                    <i class="icon dripicons-mail"></i>
-                                    <span>Email : <a href="mailto:info@example.com">info@example.com</a></span>
-                                </li>
-
-                            </ul>
-
-                        </div>
-
                     </div>
                 </div>
                 <div class="col-xl-2 col-lg-2 col-sm-6">
                     <div class="footer-widget mb-30">
                         <div class="f-widget-title">
-                            <h2>Our Links</h2>
+                            <h2>Навигация</h2>
                         </div>
                         <div class="footer-link">
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="about.html"> About Us</a></li>
-                                <li><a href="services.html"> Services </a></li>
-                                <li><a href="contact.html"> Contact Us</a></li>
-                                <li><a href="blog.html">Blog </a></li>
+                                <li><a href="/">Главная</a></li>
+                                <li><a href="{{route('about')}}">О нас</a></li>
+                                <li><a href="{{route('index')}}">Играть </a></li>
+                                <li><a href="{{route('contact')}}">Контакты</a></li>
+                                <li><a href="{{route('blog')}}">Лента</a></li>
                             </ul>
                         </div>
                     </div>
@@ -204,14 +172,13 @@
                 <div class="col-xl-2 col-lg-2 col-sm-6">
                     <div class="footer-widget mb-30">
                         <div class="f-widget-title">
-                            <h2>Our Services</h2>
+                            <h2>Помощь</h2>
                         </div>
                         <div class="footer-link">
                             <ul>
-                                <li><a href="faq.html">FAQ</a></li>
-                                <li><a href="#">Support</a></li>
-                                <li><a href="#">Privercy</a></li>
-                                <li><a href="#">Term & Conditions</a></li>
+                                <li><a href="{{route('faq')}}">FAQ</a></li>
+                                <li><a href="#">Поддержка</a></li>
+                                <li><a href="#">Политика конфиденциальности</a></li>
                             </ul>
                         </div>
                     </div>
@@ -219,21 +186,12 @@
                 <div class="col-xl-3 col-lg-3 col-sm-6">
                     <div class="footer-widget mb-30">
                         <div class="f-widget-title">
-                            <h2>Our Gallery</h2>
+                            <h2>Мы в соцсетях</h2>
                         </div>
                         <div class="footer-social  mt-30">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-
-                    </div>
-                    <div class="footer-widget mb-30">
-                        <div class="f-widget-title">
-                            <h2>Map</h2>
-                        </div>
-                        <div class="map-f">
-                            <img src="img/bg/map.png" alt="img">
+                            <a href="#"><i class="fab fa-vk"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-telegram"></i></a>
                         </div>
 
                     </div>
@@ -247,7 +205,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    Copyright © 2021 eoorox All Rights Reserved.
+                    Copyright © {{date('Y')}} Все права защищены.
                 </div>
                 <div class="col-lg-6 text-right text-xl-right">
 

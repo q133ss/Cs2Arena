@@ -5,17 +5,17 @@
     <section id="home" class="slider-area slider-four fix p-relative">
 
         <div class="slider-active">
-            <div class="single-slider slider-bg d-flex align-items-center" style="background: url(img/slider/slider_img_bg.png) no-repeat;background-size: cover; background-position: center top;">
+            <div class="single-slider slider-bg d-flex align-items-center" style="background: url('https://rocketnode.com/games/cs2-bg.png') no-repeat;background-size: cover; background-position: center top;">
                 <div class="container">
                     <div class="row justify-content-center pt-50">
                         <div class="col-lg-1 col-md-1">
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="slider-content s-slider-content">
-                                <h5 data-animation="fadeInDown" data-delay=".4s">#world class game</h5>
-                                <h2 data-animation="fadeInUp" data-delay=".4s">Are You ready For your next Challenge ?</h2>
+                                <h5 data-animation="fadeInDown" data-delay=".4s">CSArena</h5>
+                                <h2 data-animation="fadeInUp" data-delay=".4s">Испытай себя!</h2>
                                 <div class="slider-btn">
-                                    <a href="about.html" class="btn ss-btn mr-15">Read More</a>
+                                    <a href="about.html" class="btn ss-btn mr-15">ИГРАТЬ</a>
 
                                 </div>
 
@@ -41,7 +41,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <div class="s-about-img p-relative" >
-                        <img src="img/features/about_img.png" alt="img">
+                        <img src="https://files.bo3.gg/uploads/image/18192/image/webp-2e072c58551b57f6e9e0833b706dc6bb.webp" alt="img">
                     </div>
 
                 </div>
@@ -49,32 +49,27 @@
                 <div class="col-lg-6 col-md-12 col-sm-12">
                     <div class="about-content s-about-content pl-30">
                         <div class="about-title second-title pb-25">
-                            <h2>We’re the best Gaming <span>Company</span></h2>
+                            <h2><span>Испытайте</span> себя!</h2>
                             <div class="line"> <img src="img/bg/circle_left.png" alt="circle_right"></div>
 
                         </div>
 
-                        <p>Lpsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <p>Ощути конкурентную игру во всей ее красе, поднимаясь по рейтингу. Принимай участие в ранговых матчах, сбалансированных на основе навыков. Попробуй командные лиги, клубы и многое другое!</p>
                         <div class="about-content3 mt-30">
                             <div class="row">
                                 <div class="col-md-12">
                                     <ul class="green">
-                                        <li>Suspe ndisse suscipit sagittis leo.</li>
-                                        <li>Entum estibulum dignissim posuere.</li>
-                                        <li>If you are going to use a passage</li>
+                                        <li>Микс</li>
+                                        <li>Битва кланов</li>
+                                        <li>Турниры</li>
                                     </ul>
                                 </div>
 
                             </div>
-
-
                         </div>
                         <div class="slider-btn2 mt-30">
-                            <a href="about.html" class="btn ss-btn">Discover More</a>
+                            <a href="about.html" class="btn ss-btn">Подробнее</a>
                         </div>
-
-
                     </div>
                 </div>
 
@@ -94,10 +89,10 @@
                         <div class="services-content2">
                             <div class="services-icon">
                                 <img src="img/icon/pv-icon1.png" alt="icon01">
-                                <h5>Live Streaming</h5>
+                                <h5>Античит</h5>
                             </div>
 
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse .</p>
+                            <p>Самый надежный Античит в Counter-Strike</p>
                         </div>
                     </div>
 
@@ -110,10 +105,10 @@
                         <div class="services-content2">
                             <div class="services-icon">
                                 <img src="img/icon/pv-icon2.png" alt="icon01">
-                                <h5>Filtration Level</h5>
+                                <h5>Система</h5>
                             </div>
 
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse .</p>
+                            <p>Почувствуйте азарт игры против игроков вашего уровня мастерства</p>
                         </div>
                     </div>
 
@@ -126,10 +121,10 @@
                         <div class="services-content2">
                             <div class="services-icon">
                                 <img src="img/icon/pv-icon3.png" alt="icon01">
-                                <h5>Composition</h5>
+                                <h5>Навыки</h5>
                             </div>
 
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse .</p>
+                            <p>Совершенствуйте свои навыки в серьезной среде</p>
 
                         </div>
                     </div>
@@ -148,19 +143,17 @@
                 <div class="row align-items-center mb-30">
                     <div class="col-lg-12">
                         <div class="section-title cta-title mb-35">
-                            <h2>Trending <span>Games</span></h2>
+                            <h2>Ближайшие <span>туриниры</span></h2>
                             <img src="img/bg/circle_left.png" alt="circle left"/>
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="my-masonry">
                             <div class="button-group filter-button-group ">
-                                <button class="active" data-filter="*">All</button>
-                                <button data-filter=".financial">Origin</button>
-                                <button data-filter=".banking">Playstation 4</button>
-                                <button data-filter=".insurance"> Uplay</button>
-                                <button data-filter=".family">Steam</button>
-                                <button data-filter=".business">Reper</button>
+                                <button class="active" data-filter="*">Дивизион А</button>
+                                <button data-filter=".financial">Дивизион B</button>
+                                <button data-filter=".banking">Дивизион C</button>
+                                <button data-filter=".insurance">Дивизион D</button>
                             </div>
                         </div>
                     </div>
@@ -171,11 +164,11 @@
                     <div class="grid-item financial">
                         <a href="img/gallery/protfolio-img01.png"  class="popup-image">
                             <figure class="gallery-image">
-                                <img src="img/gallery/protfolio-img01.png" alt="img" class="img">
+                                <img src="https://files.bo3.gg/uploads/image/18192/image/webp-2e072c58551b57f6e9e0833b706dc6bb.webp" alt="img" class="img">
                                 <figcaption>
-                                    <span>Origin</span>
-                                    <h4>Bunny Officer</h4>
-                                    <p>Duis aute irure dolor i</p>
+                                    <span>01.03</span>
+                                    <h4>Турнир 1</h4>
+                                    <p>Описание</p>
                                 </figcaption>
                             </figure>
                         </a>
@@ -183,11 +176,11 @@
                     <div class="grid-item financial banking">
                         <a href="img/gallery/protfolio-img02.png"  class="popup-image">
                             <figure class="gallery-image">
-                                <img src="img/gallery/protfolio-img02.png" alt="img" class="img">
+                                <img src="https://files.bo3.gg/uploads/image/18192/image/webp-2e072c58551b57f6e9e0833b706dc6bb.webp" alt="img" class="img">
                                 <figcaption>
-                                    <span>New</span>
-                                    <h4>Wonderland </h4>
-                                    <p>Duis aute irure dolor i</p>
+                                    <span>03.03</span>
+                                    <h4>Турнир 2</h4>
+                                    <p>Описание</p>
                                 </figcaption>
                             </figure>
                         </a>
@@ -195,10 +188,10 @@
                     <div class="grid-item insurance">
                         <a href="img/gallery/protfolio-img03.png"  class="popup-image">
                             <figure class="gallery-image">
-                                <img src="img/gallery/protfolio-img03.png" alt="img" class="img">
+                                <img src="https://files.bo3.gg/uploads/image/18192/image/webp-2e072c58551b57f6e9e0833b706dc6bb.webp" alt="img" class="img">
                                 <figcaption>
-                                    <span>New</span>
-                                    <h4>Apex Legends </h4>
+                                    <span>06.03</span>
+                                    <h4>Турнир 3</h4>
                                     <p>Duis aute irure dolor i</p>
                                 </figcaption>
                             </figure>
@@ -207,10 +200,10 @@
                     <div class="grid-item family">
                         <a href="img/gallery/protfolio-img04.png"  class="popup-image">
                             <figure class="gallery-image">
-                                <img src="img/gallery/protfolio-img04.png" alt="img" class="img">
+                                <img src="https://files.bo3.gg/uploads/image/18192/image/webp-2e072c58551b57f6e9e0833b706dc6bb.webp" alt="img" class="img">
                                 <figcaption>
-                                    <span>Origin</span>
-                                    <h4>Wraith </h4>
+                                    <span>08.03</span>
+                                    <h4>Турнир 4</h4>
                                     <p>Duis aute irure dolor i</p>
                                 </figcaption>
                             </figure>
@@ -220,40 +213,21 @@
                 </div>
 
             </div>
-
-            <div class="vedio video-active pt-90">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="s-video-wrap" style="background-image:url(img/bg/video-img.png)">
-                        <div class="s-video-content">
-                            <a href="https://www.youtube.com/watch?v=7e90gBu4pas" class="popup-video mb-50"><img src="img/bg/play-button.png" alt="circle_right"></a>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="s-video-wrap" style="background-image:url(img/bg/video-img2.png)">
-                        <div class="s-video-content">
-                            <a href="https://www.youtube.com/watch?v=7e90gBu4pas" class="popup-video mb-50"><img src="img/bg/play-button.png" alt="circle_right"></a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
     <!-- gallery-area-end -->
     <!-- features-area -->
-    <section id="graph" class="features-area pt-120 pb-120"  style="background:url('img/bg/divider-bg.png');">
+    <section id="graph" class="features-area pt-120 pb-120"  style="background:url('https://donanimarsivi.com/wp-content/uploads/2023/09/counter-strike-global-offensive-.jpg'); background-position: center top">
         <div class="container">
 
             <div class="row align-items-center text-center">
 
                 <div class="col-lg-12 col-md-12">
                     <div class="section-title cta-title  mb-20">
-                        <h2>Join Us As a Super Fans and <br> Get all the Benefits</h2>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+                        <h2>Сколько это стоит?</h2>
+                        <p>Присоединиться можно бесплатно! Мы также предлагаем премиальные подписки, чтобы улучшить ваш опыт.</p>
                     </div>
-                    <a href="contact.html" class="btn ss-btn mr-15 mt-20 active">Join Now</a>
+                    <a href="contact.html" class="btn ss-btn mr-15 mt-20 active">Начать</a>
 
                 </div>
 
@@ -270,7 +244,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-12">
                     <div class="section-title cta-title mb-50">
-                        <h2>Upcoming <span>Matches</span></h2>
+                        <h2>Ближайшие <span>матчи</span></h2>
                         <img src="img/bg/circle_left.png" alt="left"/>
                     </div>
                 </div>
@@ -288,7 +262,7 @@
                 <div class="col-lg-2">
                     <div class="match-time text-center">
                         <h4>11:30</h4>
-                        <span>1st  October 2021</span>
+                        <span>01.03.2025</span>
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -314,8 +288,8 @@
                 </div>
                 <div class="col-lg-2">
                     <div class="match-time text-center">
-                        <h4>11:30</h4>
-                        <span>1st  October 2021</span>
+                        <h4>12:30</h4>
+                        <span>02.03.2025</span>
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -341,7 +315,7 @@
                 <div class="col-lg-2">
                     <div class="match-time text-center">
                         <h4>11:30</h4>
-                        <span>1st  October 2021</span>
+                        <span>03.03.2025</span>
                     </div>
                 </div>
                 <div class="col-lg-5">
@@ -367,7 +341,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="single-post2 mb-30  p-relative">
                         <div class="blog-thumb2">
-                            <a href="blog-details.html"><img src="img/blog/inner_b1.jpg" alt="img"></a>
+                            <a href="blog-details.html"><img src="https://distribution.faceit-cdn.net/images/63f93548-ec70-4ece-b85a-96decfd524e9.png" alt="img"></a>
 
                         </div>
                         <div class="blog-content2">
@@ -375,16 +349,16 @@
 
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h4><a href="blog-details.html">The Walking Dead Season </a></h4>
+                                    <h4><a href="blog-details.html">Обновление рейтинга FPL Europe Season 4!</a></h4>
                                     <div class="b-meta">
                                         <div class="meta-info">
                                             <ul>
                                                 <li><i class="fal fa-user"></i> Admin</li>
-                                                <li><i class="fal fa-calendar-alt"></i> 24th March 2021</li>
+                                                <li><i class="fal fa-calendar-alt"></i>27.02.2025</li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. </p>
+                                    <p>Wicadia с 89 очками удерживает трон 👑 cmtrycs и Krabeni забрались в топ-3, а KaiR0N- совершил огромный скачок, поднявшись на 16 мест! 📈</p>
                                 </div>
                             </div>
 
@@ -398,7 +372,7 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="single-post2 mb-30  p-relative">
                         <div class="blog-thumb2">
-                            <a href="blog-details.html"><img src="img/blog/inner_b2.jpg" alt="img"></a>
+                            <a href="blog-details.html"><img src="https://distribution.faceit-cdn.net/images/ce471874-806d-43a5-a2e8-41251d8529b8.jpeg?action=fit&width=800&height=1600" alt="img"></a>
 
                         </div>
                         <div class="blog-content2">
@@ -406,7 +380,7 @@
 
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h4><a href="blog-details.html">The Walking Dead Season </a></h4>
+                                    <h4><a href="blog-details.html">Пусть готовят! 👨‍🍳</a></h4>
                                     <div class="b-meta">
                                         <div class="meta-info">
                                             <ul>
@@ -415,7 +389,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. </p>
+                                    <p>Пусть готовят! 👨‍🍳 Qiddiya Gaming</p>
                                 </div>
                             </div>
 
@@ -429,13 +403,13 @@
                 <div class="col-lg-4 col-md-12">
                     <div class="single-post2 mb-30  p-relative">
                         <div class="blog-thumb2">
-                            <a href="blog-details.html"><img src="img/blog/inner_b3.jpg" alt="img"></a>
+                            <a href="blog-details.html"><img src="https://distribution.faceit-cdn.net/images/372bae44-261f-4cd6-9be2-c2d958df90ed.png?action=fit&width=800&height=1600" alt="img"></a>
 
                         </div>
                         <div class="blog-content2">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <h4><a href="blog-details.html">The Walking Dead Season </a></h4>
+                                    <h4><a href="blog-details.html">Ежедневные раздачи скинов</a></h4>
                                     <div class="b-meta">
                                         <div class="meta-info">
                                             <ul>
@@ -444,7 +418,8 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. </p>
+                                    <p>Ознакомьтесь с расписанием и призами ниже и следите за каждым матчем, чтобы получить шанс выиграть.
+                                        Не пропустите 👉</p>
                                 </div>
                             </div>
 
@@ -464,14 +439,14 @@
             <div class="row align-items-center">
                 <div class="col-xl-4 col-lg-4">
                     <div class="section-title">
-                        <h3>Our NewsLetter</h3>
+                        <h3>Наши новости</h3>
                     </div>
                 </div>
                 <div class="col-xl-8 col-lg-8">
                     <form name="ajax-form" id="contact-form4" action="#" method="post" class="contact-form newslater">
                         <div class="form-group">
-                            <input class="form-control" id="email2" name="email" type="email" placeholder="Email Address..." value="" required="">
-                            <button type="submit"     class="btn btn-custom" id="send2">Subscribe  <i class="fab fa-telegram-plane"></i></button>
+                            <input class="form-control" id="email2" name="email" type="email" placeholder="Email..." value="" required="">
+                            <button type="submit"     class="btn btn-custom" id="send2">Подписаться  <i class="fab fa-telegram-plane"></i></button>
                         </div>
                         <!-- /Form-email -->
                     </form>

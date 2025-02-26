@@ -3,12 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('index');
-Route::get('auth/steam', [\App\Http\Controllers\SteamController::class, 'redirectToSteam'])->name('auth.steam');
-Route::get('auth/steam/callback', [\App\Http\Controllers\SteamController::class, 'handleSteamCallback']);
+
+Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
+
+Route::view('about', 'index')->name('about');
+Route::view('contact', 'index')->name('contact');
+Route::view('blog', 'index')->name('blog');
+Route::view('faq', 'index')->name('faq');
 
 Route::get('/profile', function (){
     dd(auth()->user());
-})->name('profile');
+})->name('profile.index');
 /*
  * TODO
  * ПЕРЕДЕЛАТЬ ТАБЛИЦЫ С 0! РЕФАКТОР
