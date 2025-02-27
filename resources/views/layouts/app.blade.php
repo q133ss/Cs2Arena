@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Eoorox - Gaming and eSports HTML Template</title>
+    <title>@yield('title') | CsArena</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
@@ -21,6 +21,30 @@
     <link rel="stylesheet" href="/css/default.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/responsive.css">
+
+    <style>
+        .steam-login-button {
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            background-color: #00081b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .steam-login-button:hover {
+            background-color: #1b2838;
+        }
+        .steam-logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
 <!-- header -->
@@ -32,7 +56,7 @@
                 <div class="row align-items-center">
                     <div class="col-xl-1 col-lg-1">
                         <div class="logo">
-                            <a href="index.html"><img src="img/logo/logo.png" alt="logo"></a>
+                            <a href="{{route('index')}}"><img src="img/logo/logo.png" alt="logo"></a>
                         </div>
                     </div>
                     <div class="col-xl-2 col-lg-2">
@@ -44,16 +68,16 @@
                             <nav id="mobile-menu">
                                 <ul>
                                     <li class="has-sub">
-                                        <a href="index.html">Играть</a>
+                                        <a href="{{route('mix')}}">Играть</a>
                                         <ul>
-                                            <li><a href="index.html">Микс</a></li>
-                                            <li><a href="index-2.html">Битва кланов</a></li>
-                                            <li><a href="index-3.html">Турниры</a></li>
+                                            <li><a href="{{route('mix')}}">Микс</a></li>
+                                            <li><a href="{{route('cw')}}">Битва кланов</a></li>
+                                            <li><a href="{{route('tournament')}}">Турниры</a></li>
 
                                         </ul>
                                     </li>
-                                    <li><a href="about.html">Рейтинг кланов</a></li>
-                                    <li><a href="blog.html">Турниры</a></li>
+                                    <li><a href="{{route('rating')}}">Рейтинг кланов</a></li>
+                                    <li><a href="{{route('tournament')}}">Турниры</a></li>
                                     <li><a href="{{route('profile.index')}}">Профиль</a></li>
                                 </ul>
                             </nav>
@@ -85,29 +109,27 @@
 <div class="offcanvas-menu">
     <span class="menu-close"><i class="fas fa-times"></i></span>
     <form role="search" method="get" id="searchform"   class="searchform" action="http://wordpress.zcube.in/xconsulta/">
-        <input type="text" name="s" id="search" value="" placeholder="Search"  />
+        <input type="text" name="s" id="search" value="" placeholder="Поиск"  />
         <button><i class="fa fa-search"></i></button>
     </form>
 
 
     <div id="cssmenu3" class="menu-one-page-menu-container">
+        @if(!auth()->check())
+        <a href="https://steamcommunity.com/login" class="steam-login-button">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" alt="Steam Logo" class="steam-logo">
+            Войти через Steam
+        </a>
+        @endif
         <ul id="menu-one-page-menu-2" class="menu">
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="index.html">Home</a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="about.html">About Us</a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="services.html">Services</a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="pricing.html">Pricing </a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="team.html">Team </a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="index.html">Главная</a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="about.html">Микс</a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="services.html">Битва кланов</a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="pricing.html">Турниры </a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="team.html">Профиль </a></li>
 
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="projects.html">Gallery Study</a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="blog.html">Blog</a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="contact.html">Contact</a></li>
-        </ul>
-    </div>
-
-    <div id="cssmenu2" class="menu-one-page-menu-container">
-        <ul id="menu-one-page-menu-1" class="menu">
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#home"><span>+8 12 3456897</span></a></li>
-            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="#howitwork"><span>info@example.com</span></a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="projects.html">О нас</a></li>
+            <li class="menu-item menu-item-type-custom menu-item-object-custom"><a href="blog.html">Контакты</a></li>
         </ul>
     </div>
 </div>
