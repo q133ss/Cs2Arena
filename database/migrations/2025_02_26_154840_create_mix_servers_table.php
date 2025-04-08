@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('ip_address');
-            $table->string('map');
+//            $table->string('map');
             $table->integer('max_players');
-            $table->integer('current_players')->default(0);
+//            $table->integer('current_players')->default(0);
             $table->json('rank_restriction')->nullable()->comment('Ограничение по рангу, например: Start - 1000 End - 1500');
             $table->timestamps();
         });

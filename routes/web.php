@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'index')->name('index');
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
 
+# TODO при клике в турнирной сетке переходить на страницу клана!
+# TODO все данные из БД!!!!!
+# TODO реальные сервера из БД!!!!
+
 Route::get('/notifications', function (){
     return "Уведомления";
 })->name('notifications');
@@ -22,10 +26,15 @@ Route::get('/logout', function (){
 })->name('logout');
 
 Route::get('/mix', function (){
+    // Сервера с сортировкой
+    // А так же статистика юзера!
     return "Микс";
 })->name('mix.index');
 
 Route::get('/clan-war', function (){
+    // Нужно отображать тех, кто онлайн! Отправить им приглашение в лобби!
+    // Владелец клана может создать клан. Выбрав участнинов и карту. Затем участиники должны подтвердить и начнется поиск
+    // Если хотя бы один не подтвердил, то клан не может начать поиск + если кто-то отменит тоже самое!
     return "Битва кланов";
 })->name('cw.index');
 

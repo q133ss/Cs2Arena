@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TachRole extends Model
+class TechRole extends Model
 {
     //
 }

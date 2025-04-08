@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('message');
             $table->enum('type', ['info', 'warning', 'error'])->default('info');
-            $table->boolean('read')->default(0);
+            $table->boolean('is_read')->default(0);
             $table->timestamps();
         });
     }
