@@ -14,7 +14,11 @@ Route::get('qq', function (){
 });
 
 Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+# TODO чат может быть груповой!!!!!
+# TODO дискрода нет! Значит делаем тут голосовой созвон!
 Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/{chat}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+Route::post('/chat/{chat}/message', [App\Http\Controllers\ChatController::class, 'storeMessage'])->name('chat.message.store');
 Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
 Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
 Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
