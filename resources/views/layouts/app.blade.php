@@ -136,7 +136,7 @@
                                                 </div>
                                             </div>
                                             <div class="notifications-menu">
-                                                <a class="dropdown-item d-flex" href="{{route('notifications')}}">
+                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-primary brround box-shadow-primary">
                                                         <i class="fe fe-mail"></i>
                                                     </div>
@@ -146,7 +146,7 @@
                                                         <span class="notification-subtext">3 дня назад</span>
                                                     </div>
                                                 </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications')}}">
+                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-secondary brround box-shadow-secondary">
                                                         <i class="fe fe-check-circle"></i>
                                                     </div>
@@ -155,7 +155,7 @@
                                                         <span class="notification-subtext">2 часа назад</span>
                                                     </div>
                                                 </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications')}}">
+                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-success brround box-shadow-success">
                                                         <i class="fe fe-shopping-cart"></i>
                                                     </div>
@@ -165,7 +165,7 @@
                                                         <span class="notification-subtext">30 минут назад</span>
                                                     </div>
                                                 </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications')}}">
+                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg bg-pink brround box-shadow-pink">
                                                         <i class="fe fe-user-plus"></i>
                                                     </div>
@@ -176,7 +176,7 @@
                                                 </a>
                                             </div>
                                             <div class="dropdown-divider m-0"></div>
-                                            <a href="{{route('notifications')}}"
+                                            <a href="{{route('notifications.index')}}"
                                                class="dropdown-item text-center p-3 text-muted">Посмотреть все</a>
                                         </div>
                                     </div>
@@ -252,7 +252,7 @@
 
                                             </div>
                                             <div class="dropdown-divider m-0"></div>
-                                            <a href="javascript:void(0)" class="dropdown-item text-center p-3 text-muted">Смотреть все</a>
+                                            <a href="{{route('chat.index')}}" class="dropdown-item text-center p-3 text-muted">Смотреть все</a>
                                         </div>
                                     </div>
 

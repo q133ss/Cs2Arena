@@ -9,42 +9,18 @@ Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login
 # TODO все данные из БД!!!!!
 # TODO реальные сервера из БД!!!!
 
-Route::get('/notifications', function (){
-    return "Уведомления";
-})->name('notifications');
+Route::get('qq', function (){
+    \Auth()->loginUsingId(1);
+});
 
-Route::get('/chats', function (){
-    return "Список чатов";
-})->name('chat.index');
-
-Route::get('/profile', function (){
-    return "Профиль";
-})->name('profile.index');
-
-Route::get('/logout', function (){
-    return "Выйти";
-})->name('logout');
-
-Route::get('/mix', function (){
-    // Сервера с сортировкой
-    // А так же статистика юзера!
-    return "Микс";
-})->name('mix.index');
-
-Route::get('/clan-war', function (){
-    // Нужно отображать тех, кто онлайн! Отправить им приглашение в лобби!
-    // Владелец клана может создать клан. Выбрав участнинов и карту. Затем участиники должны подтвердить и начнется поиск
-    // Если хотя бы один не подтвердил, то клан не может начать поиск + если кто-то отменит тоже самое!
-    return "Битва кланов";
-})->name('cw.index');
-
-Route::get('/tournaments', function (){
-    return "Туринры";
-})->name('tournament.index');
-
-Route::get('/clan-ratings', function (){
-    return "Рейтинг кланов";
-})->name('clan.ratings');
+Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
+Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
+Route::get('/clan-war', [App\Http\Controllers\ClanWarController::class, 'index'])->name('cw.index');
+Route::get('/tournaments', [App\Http\Controllers\TournamentController::class, 'index'])->name('tournament.index');
+Route::get('/clan-ratings', [App\Http\Controllers\ClanWarController::class, 'ratings'])->name('clan.ratings');
 
 /*
  * TODO
