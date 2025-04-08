@@ -3,20 +3,40 @@
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('index');
-
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
 
-Route::view('about', 'index')->name('about');
-Route::view('rating', 'index')->name('rating');
-Route::view('contact', 'index')->name('contact');
-Route::view('blog', 'index')->name('blog');
-Route::view('faq', 'index')->name('faq');
+Route::get('/notifications', function (){
+    return "Уведомления";
+})->name('notifications');
 
-Route::view('mix', 'mix')->name('mix');
-Route::view('cw', 'cw')->name('cw');
-Route::view('tournament', 'tournament')->name('tournament');
+Route::get('/chats', function (){
+    return "Список чатов";
+})->name('chat.index');
 
-Route::view('/profile', 'profile')->name('profile.index');
+Route::get('/profile', function (){
+    return "Профиль";
+})->name('profile.index');
+
+Route::get('/logout', function (){
+    return "Выйти";
+})->name('logout');
+
+Route::get('/mix', function (){
+    return "Микс";
+})->name('mix.index');
+
+Route::get('/clan-war', function (){
+    return "Битва кланов";
+})->name('cw.index');
+
+Route::get('/tournaments', function (){
+    return "Туринры";
+})->name('tournament.index');
+
+Route::get('/clan-ratings', function (){
+    return "Рейтинг кланов";
+})->name('clan.ratings');
+
 /*
  * TODO
  * ПЕРЕДЕЛАТЬ ТАБЛИЦЫ С 0! РЕФАКТОР
