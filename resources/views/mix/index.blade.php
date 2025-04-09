@@ -19,7 +19,13 @@
                             <p class="mb-1"><strong>Игроки:</strong>Не удалось загрузить</p>
                         @endif
                     </div>
-                    <button class="btn btn-success" type="button">Подключиться</button>
+                    <button
+                        class="btn btn-success"
+                        type="button"
+                        onclick="window.location.href='steam://connect/{{$server['ip_address']}}'"
+                    >
+                        Подключиться
+                    </button>
                 </div>
                 @endforeach
             </div>
