@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ClanWarSeeder::class);
         $this->call(TournamentSeeder::class);
         $this->call(ChatSeeder::class);
+        $this->call(FriendShipSeeder::class);
+        $this->call(MathSeeder::class);
     }
 }

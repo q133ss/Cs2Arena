@@ -136,44 +136,18 @@
                                                 </div>
                                             </div>
                                             <div class="notifications-menu">
+                                                @foreach(auth()->user()->notifications()?->whereDate('created_at', \Carbon\Carbon::today())->get() as $notification)
                                                 <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-primary brround box-shadow-primary">
                                                         <i class="fe fe-mail"></i>
                                                     </div>
                                                     <div class="mt-1 wd-80p">
-                                                        <h5 class="notification-label mb-1">Полученно новое сообщение
+                                                        <h5 class="notification-label mb-1">{{$notification->message}}
                                                         </h5>
-                                                        <span class="notification-subtext">3 дня назад</span>
+                                                        <span class="notification-subtext">{{$notification->formattedTime()}}</span>
                                                     </div>
                                                 </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
-                                                    <div class="me-3 notifyimg  bg-secondary brround box-shadow-secondary">
-                                                        <i class="fe fe-check-circle"></i>
-                                                    </div>
-                                                    <div class="mt-1 wd-80p">
-                                                        <h5 class="notification-label mb-1">Вы выйграли турнир!</h5>
-                                                        <span class="notification-subtext">2 часа назад</span>
-                                                    </div>
-                                                </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
-                                                    <div class="me-3 notifyimg  bg-success brround box-shadow-success">
-                                                        <i class="fe fe-shopping-cart"></i>
-                                                    </div>
-                                                    <div class="mt-1 wd-80p">
-                                                        <h5 class="notification-label mb-1">Скоро закончится подписка
-                                                        </h5>
-                                                        <span class="notification-subtext">30 минут назад</span>
-                                                    </div>
-                                                </a>
-                                                <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
-                                                    <div class="me-3 notifyimg bg-pink brround box-shadow-pink">
-                                                        <i class="fe fe-user-plus"></i>
-                                                    </div>
-                                                    <div class="mt-1 wd-80p">
-                                                        <h5 class="notification-label mb-1">Новая заявка в друзья</h5>
-                                                        <span class="notification-subtext">1 день назад</span>
-                                                    </div>
-                                                </a>
+                                                @endforeach
                                             </div>
                                             <div class="dropdown-divider m-0"></div>
                                             <a href="{{route('notifications.index')}}"
@@ -259,14 +233,15 @@
                                     <!-- SIDE-MENU -->
                                     <div class="dropdown d-flex profile-1">
                                         <a href="javascript:void(0)" data-bs-toggle="dropdown" class="nav-link leading-none d-flex">
-                                            <img src="/assets/images/users/21.jpg" alt="profile-user"
-                                                 class="avatar  profile-user brround cover-image">
+{{--                                            <img src="/assets/images/users/21.jpg" alt="profile-user"--}}
+{{--                                                 class="avatar  profile-user brround cover-image">--}}
+                                            <span class="avatar cover-image avatar-md brround bg-violet me-3">{{substr(auth()->user()->username,0,2)}}</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                             <div class="drop-heading">
                                                 <div class="text-center">
-                                                    <h5 class="text-dark mb-0 fs-14 fw-semibold">Иванов Иван</h5>
-                                                    <small class="text-muted">Ivanov222</small>
+                                                    <h5 class="text-dark mb-0 fs-14 fw-semibold">{{auth()->user()->username}}</h5>
+                                                    <small class="text-muted">{{auth()->user()->steam_id}}</small>
                                                 </div>
                                             </div>
                                             <div class="dropdown-divider m-0"></div>

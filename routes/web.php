@@ -13,18 +13,28 @@ Route::get('qq', function (){
     \Auth()->loginUsingId(1);
 });
 
-Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
-# TODO чат может быть груповой!!!!!
-# TODO дискрода нет! Значит делаем тут голосовой созвон!
-Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
-Route::get('/chat/{chat}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
-Route::post('/chat/{chat}/message', [App\Http\Controllers\ChatController::class, 'storeMessage'])->name('chat.message.store');
-Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
-Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
+Route::redirect('/login', '/')->name('login');
+
 Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
 Route::get('/clan-war', [App\Http\Controllers\ClanWarController::class, 'index'])->name('cw.index');
 Route::get('/tournaments', [App\Http\Controllers\TournamentController::class, 'index'])->name('tournament.index');
 Route::get('/clan-ratings', [App\Http\Controllers\ClanWarController::class, 'ratings'])->name('clan.ratings');
+# TODO
+Route::get('/clan-members/{clan}', [App\Http\Controllers\ClanWarController::class, 'members'])->name('clan.members');
+Route::get('/clan/{clan}', [App\Http\Controllers\ClanWarController::class, 'show'])->name('clan.show');
+
+Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    # TODO чат может быть груповой!!!!!
+    # TODO дискрода нет! Значит делаем тут голосовой созвон!
+    Route::get('/chats', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{chat}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{chat}/message', [App\Http\Controllers\ChatController::class, 'storeMessage'])->name('chat.message.store');
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
+});
 
 /*
  * TODO

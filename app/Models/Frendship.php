@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Frendship extends Model
 {
-    //
+    protected $guarded = [];
 }
