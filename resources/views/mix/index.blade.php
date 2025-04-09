@@ -7,7 +7,7 @@
         <div class="col-md-8 offset-md-2">
             <div class="list-group">
                 @foreach($servers as $server)
-                <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="list-group-item d-flex justify-content-between align-items-center server-item">
                     <div>
                         <h5 class="mb-1">Название сервера: {{$server['name']}}</h5>
                         <p class="mb-1"><strong>IP:</strong> {{$server['ip_address']}}</p>
@@ -18,7 +18,6 @@
                             <p class="mb-1"><strong>Карта:</strong>Не удалось загрузить</p>
                             <p class="mb-1"><strong>Игроки:</strong>Не удалось загрузить</p>
                         @endif
-                        <p class="mb-1"><strong>Пинг:</strong> 777 ms</p>
                     </div>
                     <button class="btn btn-success" type="button">Подключиться</button>
                 </div>
