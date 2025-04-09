@@ -21,7 +21,7 @@ class TournamentSeeder extends Seeder
                 'end_registration_time' => now()->addDays(2),
                 'tournament_start_time' => now()->addDays(3),
                 'size' => 8,
-                'accepted_divisions' => json_encode(['A', 'B']),
+                'accepted_divisions' => ['A', 'B'],
                 'status' => 'pending'
             ],
             [
@@ -31,7 +31,7 @@ class TournamentSeeder extends Seeder
                 'end_registration_time' => now()->addDays(4),
                 'tournament_start_time' => now()->addDays(5),
                 'size' => 8,
-                'accepted_divisions' => json_encode(['B', 'C']),
+                'accepted_divisions' => ['B', 'C'],
                 'status' => 'pending'
             ],
             [
@@ -41,7 +41,7 @@ class TournamentSeeder extends Seeder
                 'end_registration_time' => now()->addDays(5),
                 'tournament_start_time' => now()->addDays(6),
                 'size' => 8,
-                'accepted_divisions' => json_encode(['C', 'D']),
+                'accepted_divisions' => ['C', 'D'],
                 'status' => 'pending'
             ]
         ];

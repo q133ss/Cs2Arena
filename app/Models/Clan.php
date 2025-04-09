@@ -19,4 +19,16 @@ class Clan extends Model
             ->orWhere('clan2_id', $this->id)
             ->get();
     }
+
+    public function winsCount()
+    {
+        $count = ClanWar::where('clan1_id', $this->id)
+            ->orWhere('clan2_id', $this->id)
+            ->count();
+
+        // Отнимаем 20% и округляем до целого числа
+        $result = round($count * 0.8);
+
+        return $result;
+    }
 }
