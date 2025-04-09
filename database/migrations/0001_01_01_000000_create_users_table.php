@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('avatar_url')->nullable();
             $table->json('social_links')->nullable();
             $table->string('country')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->integer('rank_mix')->default(0)->comment('Ранг Mix');
             $table->integer('rank_cw')->default(0)->comment('Ранг CW');
             $table->timestamp('deleted_at')->nullable();

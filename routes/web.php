@@ -4,10 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'index')->name('index');
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
+Route::get('/steam/callback', [\App\Http\Controllers\SteamController::class, 'callback'])->name('steam.callback');
 
 # TODO при клике в турнирной сетке переходить на страницу клана!
-
-# TODO турниры ФСЕ!!!
 
 Route::get('qq', function (){
     \Auth()->loginUsingId(1);

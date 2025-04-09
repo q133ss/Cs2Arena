@@ -20,7 +20,7 @@
                     <p class="h4">
                         Соревнуйся, побеждай, прокачивай скилл. Получай признание и открой двери в мир киберспорта.
                     </p>
-                    <a href="#" class="btn btn-primary btn-lg">Начать играть</a>
+                    <a href="{{route('mix.index')}}" class="btn btn-primary btn-lg">Начать играть</a>
                 </div>
             </div>
         </div>
