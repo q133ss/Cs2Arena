@@ -18,11 +18,9 @@ Route::redirect('/login', '/')->name('login');
 Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
 Route::get('/clan-war', [App\Http\Controllers\ClanWarController::class, 'index'])->name('cw.index');
 Route::get('/tournaments', [App\Http\Controllers\TournamentController::class, 'index'])->name('tournament.index');
-Route::get('/clan-ratings', [App\Http\Controllers\ClanWarController::class, 'ratings'])->name('clan.ratings');
-# TODO
-Route::get('/clan-members/{clan}', [App\Http\Controllers\ClanWarController::class, 'members'])->name('clan.members');
-Route::get('/clan/{clan}', [App\Http\Controllers\ClanWarController::class, 'show'])->name('clan.show');
-
+Route::get('/clan-ratings', [App\Http\Controllers\ClanController::class, 'ratings'])->name('clan.ratings');
+Route::get('/clan-members/{clan}', [App\Http\Controllers\ClanController::class, 'members'])->name('clan.members');
+Route::get('/clan/{clan}', [App\Http\Controllers\ClanController::class, 'show'])->name('clan.show');
 Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 
 Route::group(['middleware' => 'auth'], function(){

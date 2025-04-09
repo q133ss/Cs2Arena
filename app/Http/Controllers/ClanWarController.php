@@ -14,10 +14,4 @@ class ClanWarController extends Controller
         // Если хотя бы один не подтвердил, то клан не может начать поиск + если кто-то отменит тоже самое!
         return 'In WORK';
     }
-
-    public function ratings()
-    {
-        $clans = Clan::orderBy('points', 'DESC')->get();
-        return view('clan.ratings', compact('clans'));
-    }
 }
