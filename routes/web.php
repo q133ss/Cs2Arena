@@ -6,8 +6,8 @@ Route::view('/', 'index')->name('index');
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
 
 # TODO при клике в турнирной сетке переходить на страницу клана!
-# TODO все данные из БД!!!!!
-# TODO реальные сервера из БД!!!!
+
+# TODO турниры ФСЕ!!!
 
 Route::get('qq', function (){
     \Auth()->loginUsingId(1);
