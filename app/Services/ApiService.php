@@ -22,7 +22,6 @@ class ApiService
     public function getServersWithInfo(array $servers): array
     {
         return array_map(function($server) {
-            // Если IP содержит порт (формат "ip:port"), разделяем
             $addressParts = explode(':', $server['ip_address']);
             $ip = $addressParts[0];
             $port = $addressParts[1] ?? 27015;
@@ -40,8 +39,16 @@ class ApiService
                         'current_map' => $info['map'] ?? null,
                     ]);
                 });
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
                 Log::error("Ошибка кэширования информации о сервере CS2 {$ip}:{$port}: " . $e->getMessage());
+
+                // Возвращаем сервер с признаком оффлайн-статуса
+                return array_merge($server, [
+                    'server_info' => null,
+                    'online' => false,
+                    'current_players' => 0,
+                    'current_map' => null,
+                ]);
             }
         }, $servers);
     }

@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\ClanApplicationController;
 use Illuminate\Support\Facades\Route;
+
+# TODO Clan CRUD + Invite
+# TODO друзья, чат
+# TODO Клан вар
+
+# TODO Статистика с миксов!
+# TODO Full stat
 
 Route::view('/', 'index')->name('index');
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');
@@ -31,6 +39,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/chat/{chat}/message', [App\Http\Controllers\ChatController::class, 'storeMessage'])->name('chat.message.store');
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
+    // Кланы
+    Route::get('/clans', [App\Http\Controllers\ClanController::class, 'index'])->name('clan.list');
+    Route::get('/clans/create', [App\Http\Controllers\ClanController::class, 'create'])->name('clans.create');
+    Route::post('/clans/create', [App\Http\Controllers\ClanController::class, 'store'])->name('clans.store');
+    Route::post('/clans/{clan}/apply', [ClanApplicationController::class, 'apply'])->name('clans.apply');
+    Route::post('/clan/applications/{app_id}/{action}', [App\Http\Controllers\ClanApplicationController::class, 'processApplication'])->name('clan.applications.process');
 });
 
 /*

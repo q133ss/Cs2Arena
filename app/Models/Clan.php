@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Clan extends Model
 {
@@ -30,5 +31,11 @@ class Clan extends Model
         $result = round($count * 0.8);
 
         return $result;
+    }
+
+    // Заявки на добавление в клан
+    public function applications(): HasMany
+    {
+        return $this->hasMany(ClanApplication::class);
     }
 }

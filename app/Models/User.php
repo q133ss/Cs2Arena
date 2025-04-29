@@ -86,11 +86,18 @@ class User extends Authenticatable
 
     public function clan(): BelongsToMany
     {
-        return $this->belongsToMany(Clan::class, 'clan_members');
+        return $this->belongsToMany(Clan::class, 'clan_members')
+            ->withPivot('role');
     }
 
     public function mathes()
     {
         return $this->belongsToMany(Math::class, 'user_maths');
+    }
+
+    // Заявки в клан
+    public function clanApplications()
+    {
+        return $this->hasMany(ClanApplication::class);
     }
 }

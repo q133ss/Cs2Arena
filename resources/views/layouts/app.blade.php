@@ -38,7 +38,18 @@
                 justify-content: center;
             }
         }
+
+        .toast {
+            margin-bottom: 1rem;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
     </style>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @yield('meta')
 </head>
 
@@ -52,6 +63,7 @@
 
 <!-- PAGE -->
 <div class="page">
+    <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 99999"></div>
     <div class="page-main">
 
         <!-- app-Header -->
@@ -526,6 +538,56 @@
 
 <!-- CUSTOM JS -->
 <script src="/assets/js/custom.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Функция для показа toast
+
+        window.showToast = function(type, message) {
+            const toastContainer = document.getElementById('toast-container');
+            const toastEl = document.createElement('div');
+
+            toastEl.className = `toast show align-items-center text-white bg-${type} border-0`;
+            toastEl.setAttribute('role', 'alert');
+            toastEl.setAttribute('aria-live', 'assertive');
+            toastEl.setAttribute('aria-atomic', 'true');
+
+            toastEl.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    ${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        `;
+
+            toastContainer.appendChild(toastEl);
+
+            setTimeout(() => {
+                toastEl.remove();
+            }, 5000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+            showToast('success', '{{ session('success') }}');
+            @endif
+
+            @if(session('error'))
+            showToast('danger', '{{ session('error') }}');
+            @endif
+        });
+
+        // Проверяем flash-сообщения из сессии
+        @if(session('success'))
+        showToast('success', '{{ session('success') }}');
+        @endif
+
+        @if(session('error'))
+        showToast('danger', '{{ session('error') }}');
+        @endif
+    });
+</script>
 @yield('scripts')
 </body>
 

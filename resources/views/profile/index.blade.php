@@ -439,11 +439,14 @@
                                 </div>
                             @else
                                 <p class="text-center text-muted">Вы не состоите в клане.</p>
+
+                                <div class="d-flex gap-2">
+                                    <a href="{{route('clan.list')}}" class="btn w-100 btn-secondary">Найти клан</a>
+                                    <a href="{{route('clans.create')}}" class="btn w-100 btn-secondary">Создать клан</a>
+                                </div>
                             @endif
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>

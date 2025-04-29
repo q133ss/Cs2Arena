@@ -77,6 +77,44 @@
                         </div>
                     </div>
 
+                    @php
+                        $accessRoles = ['leader', 'deputy'];
+                    @endphp
+                    @if(in_array(auth()->user()->clan()?->first()?->pivot?->role, $accessRoles))
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Заявки на вступление в клан</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="match-list">
+                                <!-- Матч 1: Победа -->
+                                @foreach($clan->applications()->with('user')->where('status', 'pending')->get() as $application)
+                                    <div class="card">
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="card-body">
+                                                <a class="fw-bold" href="{{route('profile.show', $application->user?->id)}}">{{$application->user?->username}}</a>
+                                                <br>
+                                                <span class="badge bg-primary me-2">CW: </span>{{$application->user?->rank_cw}}
+                                                <span class="badge bg-primary me-2">MIX: </span>{{$application->user?->rank_mix}}
+                                            </div>
+
+                                            <div class="w-100" role="group" aria-label="Действия с заявкой">
+                                                <button type="button" class="w-100 btn btn-secondary accept-application" data-application-id="{{ $application->id }}">Принять</button>
+                                                <button type="button" class="w-100 mt-1 btn btn-warning reject-application" data-application-id="{{ $application->id }}">Отклонить</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                @endforeach
+                                @if($clan->applications()->where('status', 'pending')->count() == 0)
+                                    <a href="#" class="text-center">Все заявки</a>
+                                    <p class="text-muted text-center">Новых заявок еще нет</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="card">
                         <div class="card-header">
@@ -347,4 +385,42 @@
         </div>
         <!-- COL-END -->
     </div>
+@endsection
+@section('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.querySelectorAll('.accept-application').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const applicationId = this.getAttribute('data-application-id');
+                processApplication(applicationId, 'accept');
+            });
+        });
+
+        document.querySelectorAll('.reject-application').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const applicationId = this.getAttribute('data-application-id');
+                processApplication(applicationId, 'reject');
+            });
+        });
+
+        function processApplication(applicationId, action) {
+            const btn = event.currentTarget;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+            axios.post(`/clan/applications/${applicationId}/${action}`)
+                .then(response => {
+                    showToast('success', response.data.message);
+                    btn.closest('.card').remove();
+                })
+                .catch(error => {
+                    btn.disabled = false;
+                    btn.innerHTML = action === 'accept'
+                        ? 'Принять'
+                        : 'Отклонить';
+
+                    showToast('error', error.response?.data?.message || 'Ошибка обработки заявки');
+                });
+        }
+    </script>
 @endsection

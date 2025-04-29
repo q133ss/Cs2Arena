@@ -9,9 +9,9 @@
                 @foreach($servers as $server)
                 <div class="list-group-item d-flex justify-content-between align-items-center server-item">
                     <div>
-                        <h5 class="mb-1">Название сервера: {{$server['name']}}</h5>
-                        <p class="mb-1"><strong>IP:</strong> {{$server['ip_address']}}</p>
-                        @if($server['server_info'] != null)
+                        <h5 class="mb-1">Название сервера: {{$server['name'] ?? ''}}</h5>
+                        <p class="mb-1"><strong>IP:</strong> {{$server['ip_address'] ?? ''}}</p>
+                        @if(isset($server['server_info']) && $server['server_info'] != null)
                             <p class="mb-1"><strong>Карта:</strong> {{$server['server_info']['map']}}</p>
                             <p class="mb-1"><strong>Игроки:</strong> {{$server['server_info']['players']}}/{{$server['server_info']['max_players']}}</p>
                         @else
@@ -22,7 +22,7 @@
                     <button
                         class="btn btn-success"
                         type="button"
-                        onclick="window.location.href='steam://connect/{{$server['ip_address']}}'"
+                        onclick="window.location.href='steam://connect/{{$server['ip_address'] ?? ''}}'"
                     >
                         Подключиться
                     </button>
