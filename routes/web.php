@@ -45,6 +45,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/clans/create', [App\Http\Controllers\ClanController::class, 'store'])->name('clans.store');
     Route::post('/clans/{clan}/apply', [ClanApplicationController::class, 'apply'])->name('clans.apply');
     Route::post('/clan/applications/{app_id}/{action}', [App\Http\Controllers\ClanApplicationController::class, 'processApplication'])->name('clan.applications.process');
+    Route::get('/clan/{id}/applications', [App\Http\Controllers\ClanApplicationController::class, 'allApplications'])->name('clan.applications.all');
+    Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'delete'])->name('clan.applications.delete');
 });
 
 /*

@@ -98,4 +98,33 @@ class ClanApplicationController extends Controller
             ], 500);
         }
     }
+
+    public function allApplications(string $id)
+    {
+        $clan = Clan::findOrFail($id);
+
+        $accessRoles = ['leader', 'deputy'];
+        $userClan = auth()->user()->clan()?->first();
+
+        if($userClan->id == $clan->id && in_array($userClan->pivot?->role, $accessRoles)){
+            $applications = $clan->applications()->with('user')->get();
+            return view('clan.applications', compact('applications', 'userClan'));
+        }else{
+            abort(403);
+        }
+    }
+
+    public function delete(string $id)
+    {
+        $application = ClanApplication::findOrFail($id);
+        $accessRoles = ['leader', 'deputy'];
+        $userClan = auth()->user()->clan()?->first();
+        if($userClan->id == $application->clan_id && in_array($userClan->pivot?->role, $accessRoles)){
+            $application->delete();
+            return response()->json([
+                'message' => 'Заявка удалена'
+            ]);
+        }
+        abort(403);
+    }
 }

@@ -79,8 +79,9 @@
 
                     @php
                         $accessRoles = ['leader', 'deputy'];
+                        $userClan = auth()->user()->clan()?->first();
                     @endphp
-                    @if(in_array(auth()->user()->clan()?->first()?->pivot?->role, $accessRoles))
+                    @if($userClan->id == $clan->id && in_array($userClan->pivot?->role, $accessRoles))
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">Заявки на вступление в клан</div>
@@ -108,8 +109,10 @@
                                     </div>
                                 @endforeach
                                 @if($clan->applications()->where('status', 'pending')->count() == 0)
-                                    <a href="#" class="text-center">Все заявки</a>
                                     <p class="text-muted text-center">Новых заявок еще нет</p>
+                                    <div class="w-100 text-center">
+                                        <a href="{{route('clan.applications.all', $clan->id)}}" class="text-center">Все заявки</a>
+                                    </div>
                                 @endif
                             </div>
                         </div>
