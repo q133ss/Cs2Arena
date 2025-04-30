@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ClanApplicationController;
 use Illuminate\Support\Facades\Route;
 
 # TODO Clan CRUD + Invite
@@ -43,10 +42,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/clans', [App\Http\Controllers\ClanController::class, 'index'])->name('clan.list');
     Route::get('/clans/create', [App\Http\Controllers\ClanController::class, 'create'])->name('clans.create');
     Route::post('/clans/create', [App\Http\Controllers\ClanController::class, 'store'])->name('clans.store');
-    Route::post('/clans/{clan}/apply', [ClanApplicationController::class, 'apply'])->name('clans.apply');
+    Route::post('/clans/{clan}/apply', [App\Http\Controllers\ClanApplicationController::class, 'apply'])->name('clans.apply');
     Route::post('/clan/applications/{app_id}/{action}', [App\Http\Controllers\ClanApplicationController::class, 'processApplication'])->name('clan.applications.process');
     Route::get('/clan/{id}/applications', [App\Http\Controllers\ClanApplicationController::class, 'allApplications'])->name('clan.applications.all');
-    Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'delete'])->name('clan.applications.delete');
+    Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'destroy'])->name('clan.applications.delete');
 });
 
 /*

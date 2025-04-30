@@ -6,38 +6,24 @@ use App\Models\Clan;
 use App\Models\ClanApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClanApplicationController extends Controller
 {
+    private const ACCESS_ROLES = ['leader', 'deputy'];
+
+    /**
+     * Подать заявку на вступление в клан
+     */
     public function apply(Clan $clan, Request $request)
     {
         $user = auth()->user();
 
-        // Проверки
-        if ($user->clan_id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Вы уже состоите в клане'
-            ], 422);
-        }
+        $this->validateApplication($user, $clan);
 
-        if ($clan->applications()->where('user_id', $user->id)->exists()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Вы уже подавали заявку в этот клан'
-            ], 422);
-        }
-
-        if ($clan->minimal_rating && $user->rank_cw < $clan->minimal_rating) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ваш рейтинг слишком низкий для вступления в этот клан'
-            ], 422);
-        }
-
-        // Создание заявки
-        $application = $clan->applications()->create([
+        ClanApplication::create([
             'user_id' => $user->id,
+            'clan_id' => $clan->id,
             'status' => 'pending'
         ]);
 
@@ -47,84 +33,123 @@ class ClanApplicationController extends Controller
         ]);
     }
 
-    public function processApplication(string $applicationId, string $action)
+    /**
+     * Обработать заявку (принять/отклонить)
+     */
+    public function processApplication(string $application_id, string $action)
     {
-        $application = ClanApplication::findOrFail($applicationId);
+        $application = ClanApplication::findOrFail($application_id);
+        $this->authorizeApplicationProcessing($application);
 
-        $role = DB::table('clan_members')->where('clan_id', $application->clan_id)
-            ->where('user_id', auth()->id())
-            ->select('role')
-            ->first();
-
-        // Роли, которым разрешено принимать заявки
-        $accessRoles = ['leader', 'deputy'];
-        if (!$role || !in_array($role->role, $accessRoles)) {
-            return response()->json([
-                'message' => 'У вас нет прав для принятия заявок'
-            ], 403);
-        }
-
-        DB::beginTransaction();
-        try{
+        DB::transaction(function () use ($application, $action) {
             if ($action === 'accept') {
-                $application->status = 'approved';
-                $application->save();
-
-                DB::table('clan_members')->insert([
-                    'user_id' => $application->user_id,
-                    'clan_id' => $application->clan_id,
-                    'role' => 'member',
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-
-                DB::commit();
-                return response()->json([
-                    'message' => 'Игрок успешно принят в клан'
-                ]);
+                $this->acceptApplication($application);
             } else {
-                $application->status = 'rejected';
-                $application->save();
-                DB::commit();
-                return response()->json([
-                    'message' => 'Заявка отклонена'
-                ]);
+                $this->rejectApplication($application);
             }
-        }catch (\Exception $exception){
-            DB::rollBack();
-            \Log::error($exception->getMessage());
-            return response()->json([
-                'message' => 'Ошибка при обработке заявки, попробуйте позже'
-            ], 500);
-        }
+        });
+
+        return response()->json([
+            'message' => $action === 'accept'
+                ? 'Игрок успешно принят в клан'
+                : 'Заявка отклонена'
+        ]);
     }
 
+    /**
+     * Просмотр всех заявок клана
+     */
     public function allApplications(string $id)
     {
         $clan = Clan::findOrFail($id);
+        $this->authorizeViewApplications($clan);
 
-        $accessRoles = ['leader', 'deputy'];
-        $userClan = auth()->user()->clan()?->first();
+        $applications = $clan->applications()->with('user')->get();
+        $userClan = auth()->user()->clan()->first();
 
-        if($userClan->id == $clan->id && in_array($userClan->pivot?->role, $accessRoles)){
-            $applications = $clan->applications()->with('user')->get();
-            return view('clan.applications', compact('applications', 'userClan'));
-        }else{
+        return view('clan.applications', compact('applications', 'userClan'));
+    }
+
+    /**
+     * Удалить заявку
+     */
+    public function destroy(string $id)
+    {
+        $application = ClanApplication::findOrFail($id);
+        $this->authorizeApplicationProcessing($application);
+
+        $application->delete();
+
+        return response()->json(['message' => 'Заявка удалена']);
+    }
+
+    /**
+     * Валидация заявки перед созданием
+     */
+    private function validateApplication($user, $clan): void
+    {
+        if ($user->clan()->first()) {
+            abort(422, 'Вы уже состоите в клане');
+        }
+
+        if ($clan->applications()->where('user_id', $user->id)->exists()) {
+            abort(422, 'Вы уже подавали заявку в этот клан');
+        }
+
+        if ($clan->minimal_rating && $user->rank_cw < $clan->minimal_rating) {
+            abort(422, 'Ваш рейтинг слишком низкий для вступления в этот клан');
+        }
+    }
+
+    /**
+     * Авторизация обработки заявки
+     */
+    private function authorizeApplicationProcessing(ClanApplication $application): void
+    {
+        $userClan = auth()->user()->clan()->first();
+
+        if (!$userClan ||
+            $userClan->id !== $application->clan_id ||
+            !in_array($userClan->pivot->role, self::ACCESS_ROLES)) {
+            abort(403, 'У вас нет прав для этого действия');
+        }
+    }
+
+    /**
+     * Авторизация просмотра заявок
+     */
+    private function authorizeViewApplications(Clan $clan): void
+    {
+        $userClan = auth()->user()->clan()->first();
+
+        if (!$userClan ||
+            $userClan->id !== $clan->id ||
+            !in_array($userClan->pivot->role, self::ACCESS_ROLES)) {
             abort(403);
         }
     }
 
-    public function delete(string $id)
+    /**
+     * Принять заявку
+     */
+    private function acceptApplication(ClanApplication $application): void
     {
-        $application = ClanApplication::findOrFail($id);
-        $accessRoles = ['leader', 'deputy'];
-        $userClan = auth()->user()->clan()?->first();
-        if($userClan->id == $application->clan_id && in_array($userClan->pivot?->role, $accessRoles)){
-            $application->delete();
-            return response()->json([
-                'message' => 'Заявка удалена'
-            ]);
-        }
-        abort(403);
+        $application->update(['status' => 'approved']);
+
+        DB::table('clan_members')->insert([
+            'user_id' => $application->user_id,
+            'clan_id' => $application->clan_id,
+            'role' => 'member',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
+
+    /**
+     * Отклонить заявку
+     */
+    private function rejectApplication(ClanApplication $application): void
+    {
+        $application->update(['status' => 'rejected']);
     }
 }
