@@ -136,9 +136,12 @@
 
                                     <!-- FULL-SCREEN -->
                                     @if(auth()->check())
-                                    <div class="dropdown  d-flex notifications">
+                                    <div class="dropdown  d-flex notifications" onclick="openNotifications()">
                                         <a class="nav-link icon" data-bs-toggle="dropdown"><i
-                                                class="fe fe-bell"></i><span class=" pulse"></span>
+                                                class="fe fe-bell"></i>
+                                            @if(auth()->user()->notifications()->where('is_read', false)->exists())
+                                            <span class=" pulse"></span>
+                                            @endif
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                                             <div class="drop-heading border-bottom">
@@ -147,8 +150,8 @@
                                                     </h6>
                                                 </div>
                                             </div>
-                                            <div class="notifications-menu">
-                                                @foreach(auth()->user()->notifications()?->whereDate('created_at', \Carbon\Carbon::today())->get() as $notification)
+                                            <div class="notifications-menu" id="notifications-menu">
+                                                @foreach(auth()->user()->notifications()?->where('is_read', false)->get() as $notification)
                                                 <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-primary brround box-shadow-primary">
                                                         <i class="fe fe-mail"></i>
@@ -539,6 +542,7 @@
 <!-- CUSTOM JS -->
 <script src="/assets/js/custom.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Функция для показа toast
@@ -587,6 +591,38 @@
         showToast('danger', '{{ session('error') }}');
         @endif
     });
+
+    function openNotifications() {
+        // Проверяем, есть ли вообще непрочитанные уведомления
+        const unreadCount = document.getElementById('notifications-menu')?.textContent;
+        if (!unreadCount || parseInt(unreadCount) <= 0) {
+            return;
+        }
+
+        // Получаем CSRF-токен из meta-тега (для Laravel)
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        // Отправляем запрос
+        axios.post('/read-notifications', {}, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => {
+                // Обновляем UI
+                updateNotificationsUI();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('error', error.response?.data?.message || 'Ошибка сервера');
+            });
+    }
+
+    // Вспомогательные функции
+    function updateNotificationsUI() {
+        document.querySelector('.notifications .nav-link .pulse').remove();
+    }
 </script>
 @yield('scripts')
 </body>

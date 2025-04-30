@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-# TODO Clan CRUD + Invite
+# TODO Clan CRUD + Invite++++
 # TODO друзья, чат
 # TODO Клан вар
 
@@ -16,7 +16,7 @@ Route::get('/steam/callback', [\App\Http\Controllers\SteamController::class, 'ca
 # TODO при клике в турнирной сетке переходить на страницу клана!
 
 Route::get('qq', function (){
-    \Auth()->loginUsingId(1);
+    \Auth()->loginUsingId(2);
 });
 
 Route::redirect('/login', '/')->name('login');
@@ -46,7 +46,13 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/clan/applications/{app_id}/{action}', [App\Http\Controllers\ClanApplicationController::class, 'processApplication'])->name('clan.applications.process');
     Route::get('/clan/{id}/applications', [App\Http\Controllers\ClanApplicationController::class, 'allApplications'])->name('clan.applications.all');
     Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'destroy'])->name('clan.applications.delete');
+    // Прочитать уведомления
+    Route::post('read-notifications', [App\Http\Controllers\NotificationController::class, 'readNotifications'])->name('notifications.read');
 });
+
+# TODO сделать блог для SEO
+# TODO убрать этот роут в view clan.list!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Route::view('post', 'rating.how-to-increase')->name('rating.how-to-increase');
 
 /*
  * TODO

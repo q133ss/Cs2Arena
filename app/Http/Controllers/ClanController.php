@@ -34,7 +34,9 @@ class ClanController extends Controller
 
         $hasClan = $user->clan->first() ? true : false;
 
-        return view('clan.list', compact('clans', 'hasClan'));
+        $minimalRank = Clan::orderBy('minimal_rating', 'DESC')->pluck('minimal_rating')->first();
+
+        return view('clan.list', compact('clans', 'hasClan', 'minimalRank'));
     }
 
     public function ratings()

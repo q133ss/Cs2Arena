@@ -13,4 +13,9 @@ class NotificationController extends Controller
         Carbon::setLocale('ru');
         return view('notifications.index', compact('notifications'));
     }
+
+    public function readNotifications()
+    {
+        return auth()->user()->notifications()->update(['is_read' => true]);
+    }
 }

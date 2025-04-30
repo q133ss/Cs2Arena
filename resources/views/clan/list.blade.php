@@ -15,6 +15,46 @@
         <h1 class="mb-4">Список кланов</h1>
 
         <div class="row">
+            @if($clans->isEmpty())
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-8">
+                        <div class="card border-light">
+                            <div class="card-header bg-light">
+                                <h4 class="mb-0">Нет доступных кланов</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <p class="mb-3">Ваш текущий рейтинг слишком низок для вступления в существующие кланы.</p>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Ваш рейтинг:</strong></p>
+                                            <p class="h4">{{ auth()->user()->rank_cw }}</p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="mb-1"><strong>Требуемый минимальный рейтинг:</strong></p>
+                                            <p class="h4">{{ $minimalRank }}</p>
+                                        </div>
+                                    </div>
+
+                                    <p class="mb-1"><strong>Необходимо повысить на:</strong></p>
+                                    <p class="h5">{{ $minimalRank - auth()->user()->rank_cw }} очков</p>
+                                </div>
+
+                                <div class="d-grid">
+                                    <a href="{{ route('mix.index') }}" class="btn btn-secondary mb-2">
+                                        Играть микс
+                                    </a>
+                                    {{--                                    TODO надо доделать это! --}}
+                                    <a href="{{ route('rating.how-to-increase') }}" class="btn btn-primary">
+                                        Как повысить рейтинг
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @foreach($clans as $clan)
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100">
@@ -140,7 +180,6 @@
     </div>
 @endsection
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Обработчик для всех кнопок подачи заявки
