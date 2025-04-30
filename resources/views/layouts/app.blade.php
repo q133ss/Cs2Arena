@@ -151,6 +151,17 @@
                                                 </div>
                                             </div>
                                             <div class="notifications-menu" id="notifications-menu">
+                                                @if(!auth()->user()->notifications()?->where('is_read', false)->exists())
+                                                    <style>
+                                                        .notifications-menu{
+                                                            height: 30px!important;
+                                                        }
+                                                    </style>
+                                                    <div class="mt-1 wd-80p w-100 text-center mt-2">
+                                                        <h5 class="notification-label mb-1">Новых уведомлений нет
+                                                        </h5>
+                                                    </div>
+                                                @endif
                                                 @foreach(auth()->user()->notifications()?->where('is_read', false)->get() as $notification)
                                                 <a class="dropdown-item d-flex" href="{{route('notifications.index')}}">
                                                     <div class="me-3 notifyimg  bg-primary brround box-shadow-primary">
@@ -602,6 +613,7 @@
         // Получаем CSRF-токен из meta-тега (для Laravel)
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
+        @if(auth()->user()->notifications()?->where('is_read', false)->exists())
         // Отправляем запрос
         axios.post('/read-notifications', {}, {
             headers: {
@@ -617,6 +629,7 @@
                 console.error('Error:', error);
                 showToast('error', error.response?.data?.message || 'Ошибка сервера');
             });
+        @endif
     }
 
     // Вспомогательные функции
