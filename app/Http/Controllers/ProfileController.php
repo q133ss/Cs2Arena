@@ -9,7 +9,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
+        $user = auth()->user()->load(['posts', 'posts.files', 'posts.likes', 'posts.likes.user']);
         return view('profile.index', compact('user'));
     }
 

@@ -3,8 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 # TODO Clan CRUD + Invite++++
+# TODO Посты +++
 # TODO друзья, чат
 # TODO Клан вар
+# TODO профиль
+
+# Для интеграции имеем следующее:
+// Сервера от myarena
+// Есть плагин MatchZy, он со статой
+// https://shobhit-pathak.github.io/MatchZy/
+
+# КЕЙС - Создать сервер, установить MatchZy и проверить АПИ
 
 # TODO Статистика с миксов!
 # TODO Full stat
@@ -16,7 +25,7 @@ Route::get('/steam/callback', [\App\Http\Controllers\SteamController::class, 'ca
 # TODO при клике в турнирной сетке переходить на страницу клана!
 
 Route::get('qq', function (){
-    \Auth()->loginUsingId(2);
+    \Auth()->loginUsingId(1);
 });
 
 Route::redirect('/login', '/')->name('login');
@@ -37,6 +46,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/chat/{chat}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{chat}/message', [App\Http\Controllers\ChatController::class, 'storeMessage'])->name('chat.message.store');
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::resource('post', App\Http\Controllers\PostController::class);
     Route::get('/logout', [App\Http\Controllers\LogoutController::class, 'logout'])->name('logout');
     // Кланы
     Route::get('/clans', [App\Http\Controllers\ClanController::class, 'index'])->name('clan.list');
@@ -55,19 +65,6 @@ Route::group(['middleware' => 'auth'], function(){
 Route::view('post', 'rating.how-to-increase')->name('rating.how-to-increase');
 
 /*
- * TODO
- * ПЕРЕДЕЛАТЬ ТАБЛИЦЫ С 0! РЕФАКТОР
- * ПОТОМУ ЧТО!
- * Где мне хранить статистику?
-Где модели для чата?
-Где посмотреть поданные заявки в кланы?
-Где хранится избранное?
-
-БУДЕМ ЧАТУ ГПТ СКАРМЛИВАТЬ КАЖДУЮ ТАБЛИЦУ ОТДЕЛЬНО ПО ОПИСАНИЮ А ЗАТЕМ РЕДАЧИМ ЕЕ САМИМ!
-ЗАТЕМ МОДЕЛИРУЕМ СИТУАЦИЮ И ПРОВЕРЯЕМ ПО ТАБЛИЦАМ!!! НАПРИМЕР Я ВЫЙГРАЛ МАТЧ и ТД
-ХРАНИТЬ РЕЗУЛЬТАТ В JSON БРЕД, ОНОВНЫЕ ДАННЫЕ НАДО ВЫНОСИТЬ, что бы поиск был по ним
-||||
-
 ПРОТЕСТИТЬ СРАЗУ В seeder
 - Админ создает туринр.
 - набираем 8 команд например

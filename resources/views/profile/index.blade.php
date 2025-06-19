@@ -165,19 +165,31 @@
                 <div class="col-xl-6">
                     <div class="card">
                         <div class="card-body">
-                            <form class="profile-edit">
-                                <textarea class="form-control" placeholder="Напишите что-нибудь..." rows="7"></textarea>
+                            <form class="profile-edit" method="POST" action="{{route('post.store')}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="text" class="form-control mb-3 @error('title') is-invalid @enderror"" placeholder="Заголовок поста" value="{{old('title')}}" name="title">
+                                @error('title')
+                                <div class="invalid-feedback mb-3">{{ $message }}</div>
+                                @enderror
+                                <textarea class="form-control @error('text') is-invalid @enderror" placeholder="Напишите что-нибудь..." rows="7" name="text"></textarea>
+                                @error('text')
+                                <div class="invalid-feedback mb-3">{{ $message }}</div>
+                                @enderror
                                 <div class="profile-share border-top-0">
                                     <div class="mt-2">
-                                        <a href="javascript:void(0)" class="me-2" title="Audio" data-bs-toggle="tooltip" data-bs-placement="top"><span class="text-muted"><i class="fe fe-mic"></i></span></a>
-                                        <a href="javascript:void(0)" class="me-2" title="Video" data-bs-toggle="tooltip" data-bs-placement="top"><span class="text-muted"><i class="fe fe-video"></i></span></a>
-                                        <a href="javascript:void(0)" class="me-2" title="Image" data-bs-toggle="tooltip" data-bs-placement="top"><span class="text-muted"><i class="fe fe-image"></i></span></a>
+                                        <a href="javascript:void(0)" id="upload-trigger" class="me-2" title="Изображение" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <span class="text-muted"><i class="fe fe-image"></i></span>
+                                        </a>
+                                        <input type="file" id="image-upload" name="images[]" multiple accept="image/*" style="display: none;">
                                     </div>
                                     <button class="btn btn-sm btn-success ms-auto"><i class="fa fa-share ms-1"></i> Отправить</button>
                                 </div>
+                                <div id="image-preview" class="d-flex flex-wrap gap-2 mb-3"></div>
                             </form>
                         </div>
                     </div>
+
+                    @foreach($user->posts as $post)
                     <div class="card border p-0 shadow-none">
                         <div class="card-body">
                             <div class="d-flex">
@@ -187,7 +199,19 @@
                                     </div>
                                     <div class="media-body">
                                         <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">Только что</small>
+                                        <small class="text-muted">
+                                            @php
+                                                $date = \Carbon\Carbon::parse($post->created_at);
+                                            @endphp
+
+                                            @if($date->isYesterday())
+                                                Вчера, {{ $date->format('H:i') }}
+                                            @elseif($date->isToday())
+                                                Сегодня, {{ $date->format('H:i') }}
+                                            @else
+                                                {{ $date->format('d.m.Y H:i') }}
+                                            @endif
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="ms-auto">
@@ -196,168 +220,64 @@
                                             <span class=""><i class="fe fe-more-vertical"></i></span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
+                                            <a class="dropdown-item" href="{{route('post.edit', $post->id)}}">Изменить</a>
+                                            <form action="{{route('post.destroy', $post->id)}}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item">Удалить</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <h4 class="fw-semibold mt-3">От школьных друзей до профессиональных команд: Роль лиги ESEA в CS2</h4>
-                                <p class="mb-0">
-                                    ESEA League всегда была неотъемлемой частью соревновательного Counter-Strike, вливая свежие таланты в профессиональную сцену. В последнее время она становится все более популярным вариантом для казуальных игроков, которые просто хотят выйти за рамки FACEIT-матчей. Я имею в виду, что даже я сыграл пару сезонов Лиги, и я далеко не профессиональный игрок (давайте не будем проверять статистику в моем профиле, спасибо).
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer user-pro-2">
-                            <div class="media mt-0">
-                                <div class="media-user me-2">
-                                    <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border p-0 shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="media mt-0">
-                                    <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">Вчера, 12:40</small>
-                                    </div>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="dropdown show">
-                                        <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
-                                            <span class=""><i class="fe fe-more-vertical"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
+                                @if($post->files)
                                 <div class="d-flex">
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/22.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images//media/24.jpg" alt="img" class="br-5"></a>
+                                    @foreach($post->files as $file)
+                                    <a href="#" class="w-30 m-2"><img src="{{$file->src}}" alt="img" class="br-5"></a>
+                                    @endforeach
                                 </div>
-                                <h4 class="fw-semibold mt-3">Начните свой соревновательный путь в Лиге ESEA Сезон 52</h4>
+                                @endif
+                                <h4 class="fw-semibold mt-3">{{$post->title}}</h4>
                                 <p class="mb-0">
-                                    Сделайте первый шаг в соревновательную командную игру и заработайте свои первые очки в региональном зачете Valve с помощью ESEA League, стартующей 8 января! Участвуйте в еженедельных официальных матчах, сбалансированных для команд вашего уровня и ориентированных на ваше расписание!
+                                    {!! $post->text !!}
                                 </p>
                             </div>
                         </div>
                         <div class="card-footer user-pro-2">
                             <div class="media mt-0">
+                                @if(!$post->likes->isEmpty())
                                 <div class="media-user me-2">
                                     <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
+                                        @foreach($post->likes?->take(5) as $like)
+                                        <span class="avatar brround" style="background-image: url('{{$like->user?->avatar_url}}')"></span>
+                                        @endforeach
+                                        @if($post->likes->count() > 5)
+                                            <span class="avatar brround text-primary">+{{$post->likes?->count() - 5}}</span>
+                                        @endif
                                     </div>
                                 </div>
+                                @endif
                                 <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
+                                    <h6 class="mb-0 mt-2 ms-2">{{$post->likes?->count() ?? 0}} человек оценили запись</h6>
                                 </div>
                                 <div class="ms-auto">
                                     <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border p-0 shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="media mt-0">
-                                    <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">7 апреля, 09:14</small>
-                                    </div>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="dropdown show">
-                                        <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
-                                            <span class=""><i class="fe fe-more-vertical"></i></span>
+                                        @php
+                                            $liked = auth()->check() && $post->likes->contains('user_id', auth()->id());
+                                        @endphp
+                                        <a class="new me-2 {{ $liked ? 'text-danger' : 'text-muted' }} fs-16" href="JavaScript:void(0);">
+                                            <span class=""><i class="fe fe-heart"></i></span>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <div class="d-flex">
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/26.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/23.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/21.jpg" alt="img" class="br-5"></a>
-                                </div>
-                                <h4 class="fw-semibold mt-3">Thorin: «M0NESY с Falcons войдут в топ-4 BLAST Austin Major 2025»</h4>
-                                <p class="mb-0">
-                                    Аналитик CS2 Данкан Thorin Шилдс предположил возможные достижения Team Falcons на BLAST.tv Austin Major 2025 после слухов о переходе Ильи m0NESY Осипова в основной состав арабской команды. Он считает, что у Team Falcons есть шанс войти в топ-4.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer user-pro-2">
-                            <div class="media mt-0">
-                                <div class="media-user me-2">
-                                    <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
+
+{{--                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>--}}
                                         <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @endforeach
                 </div>
                 <div class="col-xl-3">
                     <div class="card">
@@ -452,4 +372,79 @@
         </div>
         <!-- COL-END -->
     </div>
+@endsection
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadInput = document.getElementById('image-upload');
+            const previewContainer = document.getElementById('image-preview');
+            const uploadTrigger = document.getElementById('upload-trigger');
+
+            // Проверка что элементы существуют
+            if (!uploadInput || !previewContainer || !uploadTrigger) {
+                console.error('Не найдены необходимые элементы DOM');
+                return;
+            }
+
+            // Обработчик клика по триггеру
+            uploadTrigger.addEventListener('click', function() {
+                uploadInput.click();
+            });
+
+            // Обработчик выбора файлов
+            uploadInput.addEventListener('change', function(event) {
+                console.log('Файлы выбраны', event.target.files);
+                previewContainer.innerHTML = '';
+
+                if (!event.target.files.length) return;
+
+                Array.from(event.target.files).forEach((file, index) => {
+                    if (!file.type.match('image.*')) {
+                        console.log('Пропущен файл (не изображение):', file.name);
+                        return;
+                    }
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const previewDiv = document.createElement('div');
+                        previewDiv.className = 'position-relative';
+                        previewDiv.style.width = '100px';
+                        previewDiv.style.height = '100px';
+
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-thumbnail h-100 w-100 object-fit-cover';
+
+                        const removeBtn = document.createElement('button');
+                        removeBtn.innerHTML = '×';
+                        removeBtn.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
+                        removeBtn.style.transform = 'translate(30%, -30%)';
+                        removeBtn.onclick = function() {
+                            removeImage(index);
+                            previewDiv.remove();
+                        };
+
+                        previewDiv.appendChild(img);
+                        previewDiv.appendChild(removeBtn);
+                        previewContainer.appendChild(previewDiv);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            // Функция удаления файла из input
+            function removeImage(index) {
+                const files = Array.from(uploadInput.files);
+                files.splice(index, 1);
+
+                const dataTransfer = new DataTransfer();
+                files.forEach(file => dataTransfer.items.add(file));
+                uploadInput.files = dataTransfer.files;
+
+                console.log('Файл удален, осталось:', uploadInput.files.length);
+            }
+        });
+    </script>
 @endsection

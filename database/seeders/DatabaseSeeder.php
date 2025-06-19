@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ChatSeeder::class);
         $this->call(FriendShipSeeder::class);
         $this->call(MathSeeder::class);
+        $this->call(PostSeeder::class);
     }
 }

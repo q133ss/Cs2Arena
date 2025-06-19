@@ -18,8 +18,8 @@ class ClanWarController extends Controller
 
         $flag = '';
         if(auth()->check()) {
-            $clan = auth()->user()->clan()?->first();
-            if(auth()->id() == $clan->owner_id){
+            $clan = auth()->user()?->clan()?->first();
+            if(auth()->id() == $clan?->owner_id){
                 $flag = 'owner';
             }else {
                 $flag = 'member';

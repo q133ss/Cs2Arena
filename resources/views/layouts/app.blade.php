@@ -613,7 +613,7 @@
         // Получаем CSRF-токен из meta-тега (для Laravel)
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
-        @if(auth()->user()->notifications()?->where('is_read', false)->exists())
+        @if(auth()->user()?->notifications()?->where('is_read', false)->exists())
         // Отправляем запрос
         axios.post('/read-notifications', {}, {
             headers: {

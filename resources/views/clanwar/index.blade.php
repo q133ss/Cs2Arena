@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', 'Битва кланов')
 @section('content')
+    @if(!auth()->check())
+        <div class="alert alert-primary mt-5" role="alert">
+            Войдите в систему, что бы принять участие в битве кланов
+        </div>
+    @else
     <div class="container mt-5">
         <h1 class="text-center mb-4">Битва кланов</h1>
 
@@ -201,4 +206,5 @@
             }
         }
     </script>
+    @endif
 @endsection
