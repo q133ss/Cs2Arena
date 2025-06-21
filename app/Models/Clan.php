@@ -38,4 +38,9 @@ class Clan extends Model
     {
         return $this->hasMany(ClanApplication::class);
     }
+
+    public function posts()
+    {
+        return $this->hasMany(ClanPost::class);
+    }
 }

@@ -187,4 +187,10 @@ class ClanApplicationController extends Controller
     {
         $application->update(['status' => 'rejected']);
     }
+
+    public function leave($clan_id)
+    {
+        DB::table('clan_members')->where('clan_id', $clan_id)->where('user_id', auth()->id())->delete();
+        return to_route('profile.index')->with('success', 'Вы вышли из клана');
+    }
 }

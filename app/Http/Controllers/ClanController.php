@@ -13,7 +13,7 @@ class ClanController extends Controller
         $user = auth()->user();
 
         $clans = Clan::query()
-            ->where('minimal_rating', '<', $user->rank_cw)
+            ->where('minimal_rating', '<=', $user->rank_cw)
             ->withCount('members')
             ->when($user, function($query) use ($user) {
                 $query->with(['applications' => function($q) use ($user) {

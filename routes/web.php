@@ -2,10 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-# TODO проверить кланы
-# TODO чат
 # TODO Клан вар
-# TODO профиль
+# TODO Турины
+# TODO Стата
+# TODO чат ??
+# TODO обновить фото в посте
 
 # Для интеграции имеем следующее:
 // Сервера от myarena
@@ -55,10 +56,16 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/clan/applications/{app_id}/{action}', [App\Http\Controllers\ClanApplicationController::class, 'processApplication'])->name('clan.applications.process');
     Route::get('/clan/{id}/applications', [App\Http\Controllers\ClanApplicationController::class, 'allApplications'])->name('clan.applications.all');
     Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'destroy'])->name('clan.applications.delete');
+    Route::post('/clan/leave/{id}', [App\Http\Controllers\ClanApplicationController::class, 'leave'])->name('leave.clan');
     // Прочитать уведомления
     Route::post('read-notifications', [App\Http\Controllers\NotificationController::class, 'readNotifications'])->name('notifications.read');
+    Route::post('clan/like/{post}', [App\Http\Controllers\PostController::class, 'clanLike'])->name('clan.post.like');
     Route::post('like/{post}', [App\Http\Controllers\PostController::class, 'like'])->name('post.like');
     Route::post('post/{post}/complaint', [App\Http\Controllers\PostController::class, 'complaint'])->name('post.complaint');
+    Route::post('clan/post/{clan_id}/store', [App\Http\Controllers\PostController::class, 'storeClan'])->name('post.clan.store');
+    Route::get('clan/post/{clan_id}/edit', [App\Http\Controllers\PostController::class, 'editClanPost'])->name('post.clan.edit');
+    Route::post('clan/post/{clan_id}/update', [App\Http\Controllers\PostController::class, 'updateClanPost'])->name('post.clan.update');
+    Route::delete('clan/post/{clan_id}/delete', [App\Http\Controllers\PostController::class, 'deleteClanPost'])->name('post.clan.delete');
     // Друзья
     Route::post('/friends/{user}/send', [App\Http\Controllers\FriendshipController::class, 'sendRequest'])->name('friends.send.request');
     Route::post('/friends/{friendship}/accept', [App\Http\Controllers\FriendshipController::class, 'acceptRequest'])->name('friends.accept.request');
