@@ -23,10 +23,51 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="btn-profile">
-                                            <button class="btn btn-primary mt-1 mb-1"> <i class="fa fa-rss"></i> <span>Follow</span></button>
-                                            <button class="btn btn-secondary mt-1 mb-1"> <i class="fa fa-envelope"></i> <span>Message</span></button>
-                                        </div>
+                                        @if(auth()->check())
+                                            @php
+                                                // Проверяем статус дружбы между текущим пользователем и просматриваемым
+                                                $friendshipStatus = null;
+
+                                                // Проверяем, отправил ли текущий пользователь заявку этому пользователю
+                                                $sentRequest = auth()->user()->friends('pending')
+                                                    ->where('friend_id', $user->id)
+                                                    ->first();
+
+                                                // Проверяем, отправил ли этот пользователь заявку текущему
+                                                $receivedRequest = $user->friends('pending')
+                                                    ->where('friend_id', auth()->id())
+                                                    ->first();
+
+                                                // Проверяем, есть ли активная дружба
+                                                $isFriend = auth()->user()->friends('accepted')
+                                                    ->where('friend_id', $user->id)
+                                                    ->exists() ||
+                                                    $user->friends('accepted')
+                                                    ->where('friend_id', auth()->id())
+                                                    ->exists();
+                                            @endphp
+
+                                            <div class="btn-profile">
+                                                @if($isFriend)
+                                                    <button class="btn btn-success mt-1 mb-1" disabled>
+                                                        <i class="fa fa-user-check"></i> <span>У вас в друзьях</span>
+                                                    </button>
+                                                @elseif($sentRequest)
+                                                    <button class="btn btn-secondary mt-1 mb-1" disabled>
+                                                        <i class="fa fa-clock"></i> <span>Заявка отправлена</span>
+                                                    </button>
+                                                @elseif($receivedRequest)
+                                                    <button class="btn btn-warning mt-1 mb-1" disabled>
+                                                        <i class="fa fa-user-clock"></i> <span>Заявка получена</span>
+                                                    </button>
+                                                @else
+                                                    <form action="{{ route('friends.send.request', $user->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary mt-1 mb-1"><i class="fa fa-user-plus"></i> <span>Добавить в друзья</span></button>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="row">
@@ -134,6 +175,9 @@
                         <div class="card-body">
                             <div class="match-list">
                                 <!-- Матч 1: Победа -->
+                                @if($user->mathes?->isEmpty())
+                                    <p class="text-center text-muted">У пользователя нет матчей</p>
+                                @endif
                                 @foreach($user->mathes as $math)
                                     @php
                                         $result = $math->result['total'];
@@ -167,186 +211,98 @@
 
                 </div>
                 <div class="col-xl-6">
-                    <div class="card border p-0 shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="media mt-0">
-                                    <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">Только что</small>
-                                    </div>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="dropdown show">
-                                        <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
-                                            <span class=""><i class="fe fe-more-vertical"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <h4 class="fw-semibold mt-3">От школьных друзей до профессиональных команд: Роль лиги ESEA в CS2</h4>
-                                <p class="mb-0">
-                                    ESEA League всегда была неотъемлемой частью соревновательного Counter-Strike, вливая свежие таланты в профессиональную сцену. В последнее время она становится все более популярным вариантом для казуальных игроков, которые просто хотят выйти за рамки FACEIT-матчей. Я имею в виду, что даже я сыграл пару сезонов Лиги, и я далеко не профессиональный игрок (давайте не будем проверять статистику в моем профиле, спасибо).
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer user-pro-2">
-                            <div class="media mt-0">
-                                <div class="media-user me-2">
-                                    <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border p-0 shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <div class="media mt-0">
-                                    <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
-                                    </div>
-                                    <div class="media-body">
-                                        <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">Вчера, 12:40</small>
-                                    </div>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="dropdown show">
-                                        <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
-                                            <span class=""><i class="fe fe-more-vertical"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-4">
+                    @if($user->posts?->isEmpty()) <p class="text-center text-muted">У пользователя нет записей.</p> @endif
+                    @foreach($user->posts as $post)
+                        <div class="card border p-0 shadow-none">
+                            <div class="card-body">
                                 <div class="d-flex">
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/22.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images//media/24.jpg" alt="img" class="br-5"></a>
-                                </div>
-                                <h4 class="fw-semibold mt-3">Начните свой соревновательный путь в Лиге ESEA Сезон 52</h4>
-                                <p class="mb-0">
-                                    Сделайте первый шаг в соревновательную командную игру и заработайте свои первые очки в региональном зачете Valve с помощью ESEA League, стартующей 8 января! Участвуйте в еженедельных официальных матчах, сбалансированных для команд вашего уровня и ориентированных на ваше расписание!
-                                </p>
-                            </div>
-                        </div>
-                        <div class="card-footer user-pro-2">
-                            <div class="media mt-0">
-                                <div class="media-user me-2">
-                                    <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
+                                    <div class="media mt-0">
+                                        <div class="media-user me-2">
+                                            <div class="">
+                                                <span class="avatar cover-image avatar-md brround bg-violet me-3">{{substr($post->user?->username,0,2)}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <h6 class="mb-0 mt-1">{{$user->username}}</h6>
+                                            <small class="text-muted">
+                                                @php
+                                                    $date = \Carbon\Carbon::parse($post->created_at);
+                                                @endphp
+
+                                                @if($date->isYesterday())
+                                                    Вчера, {{ $date->format('H:i') }}
+                                                @elseif($date->isToday())
+                                                    Сегодня, {{ $date->format('H:i') }}
+                                                @else
+                                                    {{ $date->format('d.m.Y H:i') }}
+                                                @endif
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <div class="dropdown show">
+                                            <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
+                                                <span class=""><i class="fe fe-more-vertical"></i></span>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <form action="{{route('post.complaint', $post->id)}}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item">Отправить жалобу</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
-                                    </div>
+                                <div class="mt-4">
+                                    @if($post->files)
+                                        <div class="d-flex">
+                                            @foreach($post->files as $file)
+                                                <a href="#" class="w-30 m-2"><img src="{{$file->src}}" alt="img" class="br-5"></a>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <h4 class="fw-semibold mt-3">{{$post->title}}</h4>
+                                    <p class="mb-0">
+                                        {!! $post->text !!}
+                                    </p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="card border p-0 shadow-none">
-                        <div class="card-body">
-                            <div class="d-flex">
+                            <div class="card-footer user-pro-2">
                                 <div class="media mt-0">
-                                    <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
-                                    </div>
+                                    @if(!$post->likes->isEmpty())
+                                        <div class="media-user me-2">
+                                            <div class="avatar-list avatar-list-stacked">
+                                                @foreach($post->likes?->take(5) as $like)
+                                                    <span class="avatar brround" style="background-image: url('{{$like->user?->avatar_url}}')"></span>
+                                                @endforeach
+                                                @if($post->likes->count() > 5)
+                                                    <span class="avatar brround text-primary">+{{$post->likes?->count() - 5}}</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="media-body">
-                                        <h6 class="mb-0 mt-1">{{$user->username}}</h6>
-                                        <small class="text-muted">7 апреля, 09:14</small>
+                                        <h6 class="mb-0 mt-2 ms-2" id="like-count-{{ $post->id }}">
+                                            {{ $post->likes->count() }} {{ trans_choice('человек|человека|человек', $post->likes->count()) }} {{$post->likes->count() == 1 ? 'оценил' : 'оценили'}} запись
+                                        </h6>
                                     </div>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="dropdown show">
-                                        <a class="new option-dots" href="JavaScript:void(0);" data-bs-toggle="dropdown">
-                                            <span class=""><i class="fe fe-more-vertical"></i></span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="javascript:void(0)">Изменить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Удалить</a>
-                                            <a class="dropdown-item" href="javascript:void(0)">Настройки</a>
+                                    <div class="ms-auto">
+                                        <div class="d-flex mt-1">
+                                            @php
+                                                $liked = auth()->check() && $post->likes->contains('user_id', auth()->id());
+                                            @endphp
+                                            <a onclick="likePost({{ $post->id }})"
+                                               class="new me-2 {{ $liked ? 'text-danger' : 'text-muted' }} fs-16"
+                                               href="javascript:void(0);"
+                                               id="like-btn-{{ $post->id }}">
+                                                <i class="fe fe-heart"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-4">
-                                <div class="d-flex">
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/26.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/23.jpg" alt="img" class="br-5"></a>
-                                    <a href="gallery.html" class="w-30 m-2"><img src="../assets/images/media/21.jpg" alt="img" class="br-5"></a>
-                                </div>
-                                <h4 class="fw-semibold mt-3">Thorin: «M0NESY с Falcons войдут в топ-4 BLAST Austin Major 2025»</h4>
-                                <p class="mb-0">
-                                    Аналитик CS2 Данкан Thorin Шилдс предположил возможные достижения Team Falcons на BLAST.tv Austin Major 2025 после слухов о переходе Ильи m0NESY Осипова в основной состав арабской команды. Он считает, что у Team Falcons есть шанс войти в топ-4.
-                                </p>
-                            </div>
                         </div>
-                        <div class="card-footer user-pro-2">
-                            <div class="media mt-0">
-                                <div class="media-user me-2">
-                                    <div class="avatar-list avatar-list-stacked">
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/12.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/9.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/2.jpg)"></span>
-                                        <span class="avatar brround" style="background-image: url(../assets/images/users/4.jpg)"></span>
-                                        <span class="avatar brround text-primary">+28</span>
-                                    </div>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">28 человек оценили запись</h6>
-                                </div>
-                                <div class="ms-auto">
-                                    <div class="d-flex mt-1">
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-heart"></i></span></a>
-                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
                 <div class="col-xl-3">
                     <div class="card">
@@ -441,4 +397,68 @@
         </div>
         <!-- COL-END -->
     </div>
+@endsection
+@section('scripts')
+<script>
+    function getRussianPlural(number, words) {
+        // Проверяем, что массив words содержит 3 элемента
+        if (words.length !== 3) {
+            return words[0] || '';
+        }
+
+        const lastTwo = Math.abs(number) % 100;
+        const lastDigit = lastTwo % 10;
+
+        if (lastTwo > 10 && lastTwo < 20) {
+            return words[2];
+        }
+        if (lastDigit === 1) {
+            return words[0];
+        }
+        if (lastDigit >= 2 && lastDigit <= 4) {
+            return words[1];
+        }
+        return words[2];
+    }
+
+    async function likePost(postId) {
+        try {
+            const response = await fetch(`/like/${postId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                credentials: 'same-origin'
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Ошибка при обработке лайка');
+            }
+
+            // Обновляем кнопку лайка
+            const likeBtn = document.getElementById(`like-btn-${postId}`);
+            likeBtn.classList.toggle('text-danger');
+            likeBtn.classList.toggle('text-muted');
+
+            // Обновляем счетчик лайков
+            const likeCount = document.getElementById(`like-count-${postId}`);
+            likeCount.textContent = `${data.likesCount} ${getRussianPlural(data.likesCount, ['человек', 'человека', 'человек'])} ${data.likesCount == 1 ? 'оценил' : 'оценили'} запись`;
+
+            // Обновляем аватары (если нужно)
+            // updateLikesAvatars(postId, data);
+
+        } catch (error) {
+            console.error('Error:', error);
+            if (error.message.includes('Unauthenticated')) {
+                window.location.href = '{{ route("login") }}';
+            } else {
+                console.error('Error:', error);
+            }
+        }
+    }
+</script>
 @endsection

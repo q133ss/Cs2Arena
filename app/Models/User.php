@@ -71,17 +71,13 @@ class User extends Authenticatable
     public function friends(string $status = 'accepted')
     {
         return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
-            ->where(function ($query) use ($status) {
-                // Случай 1: текущий пользователь в колонке user_id
-                $query->where('friendships.user_id', $this->id)
-                    ->where('friendships.status', $status);
-
-                // Случай 2: текущий пользователь в колонке friend_id
-                $query->orWhere('friendships.friend_id', $this->id)
-                    ->where('friendships.status', $status);
+            ->wherePivot('status', $status)
+            ->orWhere(function($query) use ($status) {
+                $query->where('friend_id', $this->id)
+                    ->where('status', $status);
             })
-            ->withPivot('status') // Добавляем статус для работы с pivot-данными
-            ->withTimestamps();   // Добавляем временные метки
+            ->withPivot('status')
+            ->withTimestamps();
     }
 
     public function clan(): BelongsToMany

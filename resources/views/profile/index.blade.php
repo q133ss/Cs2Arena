@@ -130,6 +130,9 @@
                         <div class="card-body">
                             <div class="match-list">
                                 <!-- Матч 1: Победа -->
+                                @if($user->mathes?->isEmpty())
+                                    <p class="text-center text-muted">У вас нет матчей</p>
+                                @endif
                                 @foreach($user->mathes as $math)
                                     @php
                                         $result = $math->result['total'];
@@ -189,13 +192,16 @@
                         </div>
                     </div>
 
+                    @if($user->posts->isEmpty()) <p class="text-center text-muted">У вас нет записей.</p> @endif
                     @foreach($user->posts as $post)
                     <div class="card border p-0 shadow-none">
                         <div class="card-body">
                             <div class="d-flex">
                                 <div class="media mt-0">
                                     <div class="media-user me-2">
-                                        <div class=""><img alt="" class="rounded-circle avatar avatar-md" src="../assets/images/users/16.jpg"></div>
+                                        <div class="">
+                                            <span class="avatar cover-image avatar-md brround bg-violet me-3">{{substr($post->user?->username,0,2)}}</span>
+                                        </div>
                                     </div>
                                     <div class="media-body">
                                         <h6 class="mb-0 mt-1">{{$user->username}}</h6>
@@ -259,19 +265,21 @@
                                 </div>
                                 @endif
                                 <div class="media-body">
-                                    <h6 class="mb-0 mt-2 ms-2">{{$post->likes?->count() ?? 0}} человек оценили запись</h6>
+                                    <h6 class="mb-0 mt-2 ms-2" id="like-count-{{ $post->id }}">
+                                        {{ $post->likes->count() }} {{ trans_choice('человек|человека|человек', $post->likes->count()) }} {{$post->likes->count() == 1 ? 'оценил' : 'оценили'}} запись
+                                    </h6>
                                 </div>
                                 <div class="ms-auto">
                                     <div class="d-flex mt-1">
                                         @php
                                             $liked = auth()->check() && $post->likes->contains('user_id', auth()->id());
                                         @endphp
-                                        <a class="new me-2 {{ $liked ? 'text-danger' : 'text-muted' }} fs-16" href="JavaScript:void(0);">
-                                            <span class=""><i class="fe fe-heart"></i></span>
+                                        <a onclick="likePost({{ $post->id }})"
+                                           class="new me-2 {{ $liked ? 'text-danger' : 'text-muted' }} fs-16"
+                                           href="javascript:void(0);"
+                                           id="like-btn-{{ $post->id }}">
+                                            <i class="fe fe-heart"></i>
                                         </a>
-
-{{--                                        <a class="new me-2 text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-message-square"></i></span></a>--}}
-                                        <a class="new text-muted fs-16" href="JavaScript:void(0);"><span class=""><i class="fe fe-share-2"></i></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -286,6 +294,7 @@
                         </div>
                         <div class="card-body">
                             <div class="">
+                                @if($user->friends?->isEmpty()) <p class="text-center text-muted">Вы не добавляли друзей.</p> @endif
                                 @foreach($user->friends()->limit(5)->get() as $friend)
                                     @if($loop->first)
                                         <div class="media overflow-visible">
@@ -317,6 +326,7 @@
                                 @endforeach
                             </div>
                         </div>
+                        <a href="{{route('friend.requests')}}" class="btn btn-primary">Заявки в друзья ({{$user->friends('pending')->count()}})</a>
                     </div>
 
 
@@ -442,9 +452,68 @@
                 const dataTransfer = new DataTransfer();
                 files.forEach(file => dataTransfer.items.add(file));
                 uploadInput.files = dataTransfer.files;
-
-                console.log('Файл удален, осталось:', uploadInput.files.length);
             }
         });
+
+        function getRussianPlural(number, words) {
+            // Проверяем, что массив words содержит 3 элемента
+            if (words.length !== 3) {
+                return words[0] || '';
+            }
+
+            const lastTwo = Math.abs(number) % 100;
+            const lastDigit = lastTwo % 10;
+
+            if (lastTwo > 10 && lastTwo < 20) {
+                return words[2];
+            }
+            if (lastDigit === 1) {
+                return words[0];
+            }
+            if (lastDigit >= 2 && lastDigit <= 4) {
+                return words[1];
+            }
+            return words[2];
+        }
+
+        async function likePost(postId) {
+            try {
+            const response = await fetch(`/like/${postId}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+            credentials: 'same-origin'
+        });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+            throw new Error(data.message || 'Ошибка при обработке лайка');
+        }
+
+            // Обновляем кнопку лайка
+            const likeBtn = document.getElementById(`like-btn-${postId}`);
+            likeBtn.classList.toggle('text-danger');
+            likeBtn.classList.toggle('text-muted');
+
+            // Обновляем счетчик лайков
+            const likeCount = document.getElementById(`like-count-${postId}`);
+            likeCount.textContent = `${data.likesCount} ${getRussianPlural(data.likesCount, ['человек', 'человека', 'человек'])} ${data.likesCount == 1 ? 'оценил' : 'оценили'} запись`;
+
+            // Обновляем аватары (если нужно)
+            // updateLikesAvatars(postId, data);
+
+        } catch (error) {
+            console.error('Error:', error);
+            if (error.message.includes('Unauthenticated')) {
+            window.location.href = '{{ route("login") }}';
+        } else {
+            console.error('Error:', error);
+        }
+        }
+        }
     </script>
 @endsection

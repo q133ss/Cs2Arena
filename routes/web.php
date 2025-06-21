@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-# TODO Clan CRUD + Invite++++
-# TODO Посты +++
-# TODO друзья, чат
+# TODO проверить кланы
+# TODO чат
 # TODO Клан вар
 # TODO профиль
 
@@ -58,6 +57,17 @@ Route::group(['middleware' => 'auth'], function(){
     Route::delete('/clan/applications/{id}', [App\Http\Controllers\ClanApplicationController::class, 'destroy'])->name('clan.applications.delete');
     // Прочитать уведомления
     Route::post('read-notifications', [App\Http\Controllers\NotificationController::class, 'readNotifications'])->name('notifications.read');
+    Route::post('like/{post}', [App\Http\Controllers\PostController::class, 'like'])->name('post.like');
+    Route::post('post/{post}/complaint', [App\Http\Controllers\PostController::class, 'complaint'])->name('post.complaint');
+    // Друзья
+    Route::post('/friends/{user}/send', [App\Http\Controllers\FriendshipController::class, 'sendRequest'])->name('friends.send.request');
+    Route::post('/friends/{friendship}/accept', [App\Http\Controllers\FriendshipController::class, 'acceptRequest'])->name('friends.accept.request');
+    Route::post('/friends/{friendship}/reject', [App\Http\Controllers\FriendshipController::class, 'rejectRequest'])->name('friends.reject.request');
+    Route::delete('/friends/{friendship}', [App\Http\Controllers\FriendshipController::class, 'removeFriend'])->name('friends.remove.friend');
+    Route::get('/friends/incoming', [App\Http\Controllers\FriendshipController::class, 'incomingRequests'])->name('friends.incoming.requests');
+    Route::get('/friends/outgoing', [App\Http\Controllers\FriendshipController::class, 'outgoingRequests'])->name('friends.outgoing.requests');
+    Route::get('/friends', [App\Http\Controllers\FriendshipController::class, 'friends'])->name('friends');
+    Route::get('/friend/requests', [App\Http\Controllers\FriendshipController::class, 'friendRequests'])->name('friend.requests');
 });
 
 # TODO сделать блог для SEO

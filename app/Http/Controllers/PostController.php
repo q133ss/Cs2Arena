@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Complaint;
 use App\Models\File;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +24,39 @@ class PostController extends Controller
     {
         $posts = Post::latest()->paginate(10);
         return view('posts.index', compact('posts'));
+    }
+
+    public function like(Post $post)
+    {
+        try {
+            $like = Like::where([
+                'user_id' => Auth::id(),
+                'likeable_type' => Post::class,
+                'likeable_id' => $post->id,
+            ])->exists();
+
+            if($like) {
+                Like::where([
+                    'user_id' => Auth::id(),
+                    'likeable_type' => Post::class,
+                    'likeable_id' => $post->id,
+                ])->delete();
+            }else{
+                Like::create([
+                    'user_id' => Auth::id(),
+                    'likeable_type' => Post::class,
+                    'likeable_id' => $post->id,
+                ]);
+            }
+
+            $likeCount = Like::where('likeable_type', Post::class)->where('likeable_id', $post->id)->count();
+
+            return response()->json(['success' => true, 'likesCount' => $likeCount]);
+        }catch (\Exception $exception){
+            // Логируем ошибку, если нужно
+            \Log::error('Ошибка при лайке поста: ' . $exception->getMessage());
+            return response()->json(['success' => false, 'message' => 'Произошла ошибка при обработке запроса.'], 500);
+        }
     }
 
     /**
@@ -117,5 +152,15 @@ class PostController extends Controller
         $post->delete();
 
         return redirect()->route('profile.index')->with('success', 'Запись успешно удалена!');
+    }
+
+    public function complaint(Post $post)
+    {
+        Complaint::create([
+            'user_id' => Auth::id(),
+            'post_id' => $post->id
+        ]);
+
+        return back()->with('success', 'Жалоба отправлена!');
     }
 }
