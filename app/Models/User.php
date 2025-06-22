@@ -71,10 +71,14 @@ class User extends Authenticatable
     public function friends(string $status = 'accepted')
     {
         return $this->belongsToMany(User::class, 'friendships', 'user_id', 'friend_id')
-            ->wherePivot('status', $status)
-            ->orWhere(function($query) use ($status) {
-                $query->where('friend_id', $this->id)
-                    ->where('status', $status);
+            ->where(function ($query) use ($status) {
+                $query->where(function ($q) use ($status) {
+                    $q->where('friendships.user_id', auth()->id())
+                        ->where('friendships.status', $status);
+                })->orWhere(function ($q) use ($status) {
+                    $q->where('friendships.friend_id', auth()->id())
+                        ->where('friendships.status', $status);
+                });
             })
             ->withPivot('status')
             ->withTimestamps();

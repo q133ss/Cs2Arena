@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Route;
 // Есть плагин MatchZy, он со статой
 // https://shobhit-pathak.github.io/MatchZy/
 
-# КЕЙС - Создать сервер, установить MatchZy и проверить АПИ
+// Есть так же с АПИ!!! https://github.com/akiver/cs-demo-manager
 
 # TODO Статистика с миксов!
 # TODO Full stat
+
+# TODO для банов используется этот плагин: https://github.com/Iksix/Iks_Admin
+// Там есть IksAdmin/Main.cs смотреть нужно его
+// Там так же есть IksAdmin/Commands/Ban.cs
 
 Route::view('/', 'index')->name('index');
 Route::get('/steam/login', [\App\Http\Controllers\SteamController::class, 'login'])->name('steam.login');

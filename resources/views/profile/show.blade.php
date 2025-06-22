@@ -23,7 +23,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @if(auth()->check())
+                                        @if(auth()->check() && auth()->user()->id !== $user->id)
                                             @php
                                                 // Проверяем статус дружбы между текущим пользователем и просматриваемым
                                                 $friendshipStatus = null;
@@ -39,9 +39,7 @@
                                                     ->first();
 
                                                 // Проверяем, есть ли активная дружба
-                                                $isFriend = auth()->user()->friends('accepted')
-                                                    ->where('friend_id', $user->id)
-                                                    ->exists() ||
+                                                $isFriend = auth()->user()->friends('accepted')->where('users.id', $user->id)->exists() ||
                                                     $user->friends('accepted')
                                                     ->where('friend_id', auth()->id())
                                                     ->exists();
