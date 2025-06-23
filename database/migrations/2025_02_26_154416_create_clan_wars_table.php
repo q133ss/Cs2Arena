@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('clan1_id')->constrained('clans')->onDelete('cascade');
             $table->foreignId('clan2_id')->constrained('clans')->onDelete('cascade');
             $table->enum('status', ['pending', 'active', 'completed', 'disputed'])->default('pending');
-            $table->string('server_ip')->nullable();
-            $table->string('server_password')->nullable();
+            $table->foreignId('server_id')->constrained('clan_war_servers')->onDelete('cascade');
             $table->json('selected_maps')->nullable();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();

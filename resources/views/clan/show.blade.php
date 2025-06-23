@@ -1,5 +1,40 @@
 @extends('layouts.app')
 @section('title', 'Клан')
+@section('meta')
+    <style>
+        .map-selector {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .map-selector:hover {
+            transform: scale(1.05);
+        }
+
+        .map-selector img {
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        input[type="checkbox"]:checked + .map-selector img {
+            border-color: #ffc107;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+        }
+
+        .map-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+@endsection
 @section('content')
     @php
         $accessRoles = ['leader', 'deputy'];
@@ -35,6 +70,66 @@
                                                 <button type="submit" class="btn btn-danger mt-1 mb-1"><i class="fa fa-sign-out"></i> <span>Выйти из клана</span></button>
                                             </form>
                                         </div>
+                                        @elseif($userClan?->id && $userClan?->pivot?->role == 'leader')
+                                            <div class="btn-profile">
+                                                @if(\App\Models\ClanWar::where('clan1_id', $userClan->id)
+                                                        ->orWhere('clan2_id', $userClan->id)
+                                                        ->where('status', '!=', 'completed')
+                                                        ->exists())
+                                                    <button disabled class="btn btn-primary">Запрос на битву отправлен</button>
+                                                @else
+                                                    <!-- Кнопка для открытия модального окна -->
+                                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#clanWarModal">
+                                                        <i class="fa fa-fire"></i> Пригласить на битву кланов
+                                                    </button>
+
+                                                    <!-- Модальное окно -->
+                                                    <div class="modal fade" id="clanWarModal" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Приглашение на битву кланов</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form id="clanWarForm" action="{{ route('cw.request', $clan->id) }}" method="POST">
+                                                                    @csrf
+                                                                    <div class="modal-body">
+                                                                        <!-- Выбор карт -->
+                                                                        <div class="mb-4">
+                                                                            <h6>Выберите карты:</h6>
+                                                                            <div class="row maps-container">
+                                                                                @foreach(['dust2', 'inferno', 'mirage', 'overpass', 'nuke', 'vertigo', 'ancient'] as $map)
+                                                                                    <div class="col-md-3 col-6 mb-3">
+                                                                                        <input type="checkbox" name="selected_maps[]" id="map_{{ $map }}" value="{{ $map }}" class="d-none">
+                                                                                        <label for="map_{{ $map }}" class="map-selector">
+                                                                                            <img src="{{ asset('images/maps/'.$map.'.webp') }}" alt="{{ $map }}" class="img-fluid">
+                                                                                            <div class="map-name">{{ ucfirst($map) }}</div>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Выбор даты и времени -->
+                                                                        <div class="mb-3">
+                                                                            <label for="war_datetime" class="form-label">Дата и время начала битвы</label>
+                                                                            <input type="datetime-local"
+                                                                                   class="form-control"
+                                                                                   id="war_datetime"
+                                                                                   name="start_time"
+                                                                                   min="{{ now()->addHour()->format('Y-m-d\TH:i') }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                                                        <button type="submit" class="btn btn-primary">Отправить</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
@@ -125,6 +220,50 @@
                             </div>
                         </div>
                     </div>
+
+{{--                        Заявки на битву--}}
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Заявки на битву кланов</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="match-list">
+                                    <!-- Матч 1: Победа -->
+                                    @if($clan->mathes()->where('status', 'pending')->isEmpty())
+                                        <p class="text-muted text-center">Заявок нет</p>
+                                    @endif
+                                    @foreach($clan->mathes()->where('status', 'pending') as $math)
+                                        <div class="match-item bg-opacity-10 p-3 mb-3 rounded-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+
+                                                    @php
+                                                        if($math->clan1_id == $clan->id){
+                                                            $aponent = $math->clan2;
+                                                        } else {
+                                                            $aponent = $math->clan1;
+                                                        }
+                                                    @endphp
+                                                    <p class="mb-0"><strong>Клан:</strong> <a href="{{route('clan.show', $aponent->id)}}">{{$aponent->name}}</a></p>
+
+                                                    <p class="mb-1">Карты:
+                                                        @foreach($math->selected_maps as $map)
+                                                            <span class="badge bg-secondary me-1">{{$map}}</span>
+                                                        @endforeach
+                                                    </p>
+
+                                                    <p>Дата начала: {{$math->start_time?->format('d.m.Y H:i')}}</p>
+
+{{--                                                    TODO нужно понять, вдруг это мы отправили запрос--}}
+                                                    <button class="btn btn-success">Принять</button>
+                                                    <button class="btn btn-secondary">Отклонить</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                     @endif
 
                     <div class="card">
@@ -134,9 +273,12 @@
                         <div class="card-body">
                             <div class="match-list">
                                 <!-- Матч 1: Победа -->
-                                @foreach($clan->mathes() as $math)
+                                @if($clan->mathes()->where('status', '!=', 'pending')->isEmpty())
+                                    <p class="text-muted text-center">Клан еще не участвовал в битвах</p>
+                                @endif
+                                @foreach($clan->mathes()->where('status', '!=', 'pending') as $math)
                                     @php
-                                        $result = $math->result['total'];
+                                        $result = isset($math->result['total']) ? $math->result['total'] : null;
                                         if($result == 'win'){
                                             $class = 'bg-success';
                                             $badge = 'Победа';
@@ -152,18 +294,35 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-1">{{$math->map}}</h6>
-                                                <p class="mb-0"><strong>Сервер:</strong> {{$math->server?->ip}}</p>
-                                                <p class="mb-0"><strong>Счёт:</strong> {{$math->result['user1']['frags']}}:{{$math->result['user1']['deaths']}}</p>
+                                                @php
+                                                    if($math->clan1_id == $clan->id){
+                                                        $aponent = $math->clan2;
+                                                    } else {
+                                                        $aponent = $math->clan1;
+                                                    }
+                                                @endphp
+                                                <p class="mb-0"><strong>Клан:</strong> <a href="{{route('clan.show', $aponent->id)}}">{{$aponent->name}}</a></p>
+
+                                                <p class="mb-0"><strong>Сервер:</strong> {{$math->server?->name}}</p>
+
+                                                <p class="mb-0"><strong>Счёт:</strong>
+                                                    @if($result)
+                                                    {{$math->result['user1']['frags']}}:{{$math->result['user1']['deaths']}}
+                                                    @else
+                                                        Матч еще не состоялся, либо был отменен
+                                                    @endif
+                                                </p>
+
+                                                <p>Дата начала: {{$math->start_time?->format('d.m.Y H:i')}}</p>
                                             </div>
+                                            @if($result)
                                             <div>
                                                 <span class="badge {{$class}}">{{$badge}}</span>
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
-                                @if($clan->mathes()->count() == 0)
-                                    <p class="text-muted text-center">Клан еще не участвовал в битвах</p>
-                                @endif
                             </div>
                         </div>
                     </div>

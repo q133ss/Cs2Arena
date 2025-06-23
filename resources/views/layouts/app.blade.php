@@ -474,6 +474,59 @@
     </footer>
     <!-- FOOTER END -->
 
+    @if ($errors->any() || session('error') || session('success'))
+        <div class="notifications-container position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            @foreach ($errors->all() as $error)
+                <div class="toast show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger text-white">
+                        <strong class="me-auto">Ошибка</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        {{ $error }}
+                    </div>
+                </div>
+            @endforeach
+
+            @if(session('error'))
+                <div class="toast show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-danger text-white">
+                        <strong class="me-auto">Ошибка</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        {{ session('error') }}
+                    </div>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="toast show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-success text-white">
+                        <strong class="me-auto">Успех</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <script>
+            // Автоматическое закрытие уведомлений через 5 секунд
+            document.addEventListener('DOMContentLoaded', function() {
+                const toasts = document.querySelectorAll('.toast');
+                toasts.forEach(toast => {
+                    setTimeout(() => {
+                        const bsToast = new bootstrap.Toast(toast);
+                        bsToast.hide();
+                    }, 5000);
+                });
+            });
+        </script>
+    @endif
+
 </div>
 
 <!-- BACK-TO-TOP -->
@@ -583,24 +636,24 @@
             }, 5000);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            @if(session('success'))
-            showToast('success', '{{ session('success') }}');
-            @endif
+        {{--document.addEventListener('DOMContentLoaded', function() {--}}
+        {{--    @if(session('success'))--}}
+        {{--    showToast('success', '{{ session('success') }}');--}}
+        {{--    @endif--}}
 
-            @if(session('error'))
-            showToast('danger', '{{ session('error') }}');
-            @endif
-        });
+        {{--    @if(session('error'))--}}
+        {{--    showToast('danger', '{{ session('error') }}');--}}
+        {{--    @endif--}}
+        {{--});--}}
 
         // Проверяем flash-сообщения из сессии
-        @if(session('success'))
-        showToast('success', '{{ session('success') }}');
-        @endif
+{{--        @if(session('success'))--}}
+{{--        showToast('success', '{{ session('success') }}');--}}
+{{--        @endif--}}
 
-        @if(session('error'))
-        showToast('danger', '{{ session('error') }}');
-        @endif
+{{--        @if(session('error'))--}}
+{{--        showToast('danger', '{{ session('error') }}');--}}
+{{--        @endif--}}
     });
 
     function openNotifications() {

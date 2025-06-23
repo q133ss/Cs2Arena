@@ -43,4 +43,13 @@ class Clan extends Model
     {
         return $this->hasMany(ClanPost::class);
     }
+
+    // Список кланваров
+    public function clanwars()
+    {
+        return ClanWar::where(function($query) {
+            $query->where('clan1_id', $this->id)
+                ->orWhere('clan2_id', $this->id);
+        });
+    }
 }

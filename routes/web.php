@@ -8,6 +8,19 @@ use Illuminate\Support\Facades\Route;
 # TODO чат ??
 # TODO обновить фото в посте
 
+/***************** CLAN WAR
+ *
+ * // Если юзер не авторизован, то показываем заглушку!
+ * // Если он не главный в клане, то он не может начать!
+ *
+ * // Нужно отображать тех, кто онлайн! Отправить им приглашение в лобби!
+ * // Владелец клана может создать клан. Выбрав участнинов и карту. Затем участиники должны подтвердить и начнется поиск
+ * // Если хотя бы один не подтвердил, то клан не может начать поиск + если кто-то отменит тоже самое!
+ *
+ * ВЛАДЕЛЕЦ КЛАНА МОЖЕТ ОТПРАВИТЬ ПРИГЛАШЕНИЕ В КВ ДРУГОМУ КЛАНУ, ДРУГОЙ КЛАН ПОЛУЧАЕТ УВЕДОМЛЕНИЕ И ПРИНИМАЕТ ИЛИ ОТКАЗЫВАЕТСЯ
+ *
+ *****************/
+
 # Для интеграции имеем следующее:
 // Сервера от myarena
 // Есть плагин MatchZy, он со статой
@@ -28,6 +41,8 @@ Route::get('/steam/callback', [\App\Http\Controllers\SteamController::class, 'ca
 
 # TODO при клике в турнирной сетке переходить на страницу клана!
 
+# TODO если лидер выходит из клана, то нужно передать права заму или удалить клан!!!
+
 Route::get('qq', function (){
     \Auth()->loginUsingId(1);
 });
@@ -37,6 +52,7 @@ Route::redirect('/login', '/')->name('login');
 Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
 Route::get('/clan-war', [App\Http\Controllers\ClanWarController::class, 'index'])->name('cw.index');
 Route::get('/tournaments', [App\Http\Controllers\TournamentController::class, 'index'])->name('tournament.index');
+// TODO добавить фильтрацию по рейтингу и тд
 Route::get('/clan-ratings', [App\Http\Controllers\ClanController::class, 'ratings'])->name('clan.ratings');
 Route::get('/clan-members/{clan}', [App\Http\Controllers\ClanController::class, 'members'])->name('clan.members');
 Route::get('/clan/{clan}', [App\Http\Controllers\ClanController::class, 'show'])->name('clan.show');
@@ -79,6 +95,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/friends/outgoing', [App\Http\Controllers\FriendshipController::class, 'outgoingRequests'])->name('friends.outgoing.requests');
     Route::get('/friends', [App\Http\Controllers\FriendshipController::class, 'friends'])->name('friends');
     Route::get('/friend/requests', [App\Http\Controllers\FriendshipController::class, 'friendRequests'])->name('friend.requests');
+    // Битва кланов
+    Route::post('clan-war/request/{clan_id}', [App\Http\Controllers\ClanWarController::class, 'request'])->name('cw.request');
 });
 
 # TODO сделать блог для SEO
