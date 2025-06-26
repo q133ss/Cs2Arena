@@ -232,31 +232,32 @@
                                     @if($clan->mathes()->where('status', 'pending')->isEmpty())
                                         <p class="text-muted text-center">Заявок нет</p>
                                     @endif
-                                    @foreach($clan->mathes()->where('status', 'pending') as $math)
+                                    @foreach($upcomingMatches as $match)
                                         <div class="match-item bg-opacity-10 p-3 mb-3 rounded-3">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1">
 
                                                     @php
-                                                        if($math->clan1_id == $clan->id){
-                                                            $aponent = $math->clan2;
+                                                        if($match->clan1_id == $clan->id){
+                                                            $aponent = $match->clan2;
                                                         } else {
-                                                            $aponent = $math->clan1;
+                                                            $aponent = $match->clan1;
                                                         }
                                                     @endphp
                                                     <p class="mb-0"><strong>Клан:</strong> <a href="{{route('clan.show', $aponent->id)}}">{{$aponent->name}}</a></p>
 
                                                     <p class="mb-1">Карты:
-                                                        @foreach($math->selected_maps as $map)
+                                                        @foreach($match->selected_maps as $map)
                                                             <span class="badge bg-secondary me-1">{{$map}}</span>
                                                         @endforeach
                                                     </p>
 
-                                                    <p>Дата начала: {{$math->start_time?->format('d.m.Y H:i')}}</p>
-
-{{--                                                    TODO нужно понять, вдруг это мы отправили запрос--}}
-                                                    <button class="btn btn-success">Принять</button>
-                                                    <button class="btn btn-secondary">Отклонить</button>
+                                                    <p>Дата начала: {{$match->start_time?->format('d.m.Y H:i')}}</p>
+                                                    @dump($match->clan1_id, $clan->id)
+                                                    @if($match->clan1_id != $clan->id)
+                                                    <a href="{{route('cw.accept', $match->id)}}" class="btn btn-success">Принять</a>
+                                                    <a href="{{route('cw.reject', $match->id)}}" class="btn btn-secondary">Отклонить</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -314,6 +315,12 @@
                                                 </p>
 
                                                 <p>Дата начала: {{$math->start_time?->format('d.m.Y H:i')}}</p>
+
+                                                @if(\Carbon\Carbon::parse($math->start_time)->isFuture())
+                                                    <div>
+                                                        <a class="btn btn-primary" href="{{route('cw.show', $math->id)}}">Перейти в лобби</a>
+                                                    </div>
+                                                @endif
                                             </div>
                                             @if($result)
                                             <div>

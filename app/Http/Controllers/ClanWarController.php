@@ -44,6 +44,12 @@ class ClanWarController extends Controller
         ]);
     }
 
+    public function show(string $clanWarId)
+    {
+        $clanWar = ClanWar::findOrFail($clanWarId);
+        return view('clanwar.lobby', compact('clanWar'));
+    }
+
     // Отправить запрос на войну кланов
     public function request(Request $request, $clan_id)
     {
@@ -122,4 +128,29 @@ class ClanWarController extends Controller
         return back()->with('success', 'Запрос на войну кланов отправлен');
     }
 
+    private function cwCheck(ClanWar $clanWar)
+    {
+        $userClan = auth()->user()->clan()->first();
+
+        if(($clanWar->clan1_id != $userClan->id && $clanWar->clan2_id != $userClan->id) || !in_array($userClan->pivot->role, self::ACCESS_ROLES)) {
+            abort(403, 'У вас нет прав для этого действия');
+        }
+    }
+
+    public function accept(string $cw_id)
+    {
+        $clanWar = ClanWar::findOrFail($cw_id);
+        $this->cwCheck($clanWar);
+        $clanWar->update(['status' => 'active']);
+
+        return back()->with('success', 'Заявка на битву кланов принята');
+    }
+
+    public function reject(string $cw_id)
+    {
+        $clanWar = ClanWar::findOrFail($cw_id);
+        $this->cwCheck($clanWar);
+        $clanWar->delete();
+        return back()->with('success', 'Заявка на битву кланов отклонена');
+    }
 }

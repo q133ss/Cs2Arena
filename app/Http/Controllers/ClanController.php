@@ -55,7 +55,12 @@ class ClanController extends Controller
 
     public function show(Clan $clan)
     {
-        return view('clan.show', compact('clan'));
+        $upcomingMatches = $clan->matchesQuery()
+            ->where('status', 'pending')
+            ->whereDate('start_time', '>', now())
+            ->get();
+
+        return view('clan.show', compact('clan', 'upcomingMatches'));
     }
 
     public function create()

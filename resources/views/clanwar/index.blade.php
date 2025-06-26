@@ -6,6 +6,14 @@
             Войдите в систему, чтобы участвовать в битве кланов.
         </div>
     @else
+        @php
+            $getStatus = [
+                'pending' => 'Ожидание',
+                'active'  => 'Заявка принята',
+                'completed' => 'Завершен',
+                'disputed' => 'Спорная ситуация'
+            ];
+        @endphp
         <div class="container mt-5">
             <h1 class="text-center mb-4">Главная страница битвы кланов</h1>
 
@@ -16,8 +24,9 @@
                     <div class="card">
                         <div class="card-body">
                             <p><strong>Дата:</strong> {{ $nextClanWar->start_time }}</p>
-                            <p><strong>Статус:</strong> {{ $nextClanWar->status }}</p>
-                            <p><strong>Карты:</strong> {{ $nextClanWar->selected_maps }}</p>
+                            <p><strong>Статус:</strong> {{ $getStatus[$nextClanWar->status] }}</p>
+                            <p><strong>Карта:</strong> {{ $nextClanWar->selected_maps[0] }}</p>
+                            <a href="{{route('cw.show', $nextClanWar->id)}}" class="btn btn-primary">Перейти в лобби</a>
                         </div>
                     </div>
                 @else
@@ -43,9 +52,9 @@
                     <ul class="list-group">
                         @foreach($clanWars as $war)
                             <li class="list-group-item">
-                                {{ $war->start_time }} —
-                                vs {{ $war->clan1_id === $clan->id ? 'Клан #' . $war->clan2_id : 'Клан #' . $war->clan1_id }} —
-                                Статус: {{ $war->status }}
+                                {{ $war->start_time->format('d.m.Y H:i') }} —
+                                против <a href="{{route('clan.show',  $war->clan1_id === $clan->id ? $war->clan2_id : $war->clan1_id)}}">{{ $war->clan1_id === $clan->id ? 'Клан #' . $war->clan2_id : 'Клан #' . $war->clan1_id }}</a> —
+                                Статус: {{ $getStatus[$war->status] }}
                             </li>
                         @endforeach
                     </ul>

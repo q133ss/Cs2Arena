@@ -18,6 +18,8 @@
             // иначе показываем "клан еще не начал битву.."
             // Так же надо планировать битву!! Типо "Битва будет в 20:00" (start_time, end_time)
             // А снизу история битв
+
+            $opponent = $clanWar->clan1_id == $clan->id ? $clanWar->clan2 : $clanWar->clan1;
         @endphp
         <div class="row">
             <!-- Левая колонка (3 блока) -->
@@ -42,7 +44,9 @@
                                 <td>Player1</td>
                                 <td><span class="badge bg-warning">Ожидание</span></td>
                                 <td>
+                                    @if($isLeader)
                                     <button class="btn btn-danger btn-sm">Выгнать</button>
+                                    @endif
                                 </td>
                             </tr>
                             <!-- Добавьте больше строк по необходимости -->
@@ -52,6 +56,7 @@
                 </div>
 
                 <!-- Блок 2: Пригласить игрока -->
+                @if($isLeader)
                 <div class="card mb-4">
                     <div class="card-header">Пригласить игрока</div>
                     <div class="card-body">
@@ -65,55 +70,9 @@
                         <button class="btn btn-primary w-100" id="invite-player-btn">Пригласить</button>
                     </div>
                 </div>
+                @endif
 
                 <!-- Блок 3: Статус текущего пользователя -->
-                <div class="card">
-                    <div class="card-header">Мой статус</div>
-                    <div class="card-body text-center">
-
-                        <div id="ready" style="display: none">
-                            <p><strong class="text-success">Вы готовы к игре</strong></p>
-                            <button class="btn btn-link text-danger" onclick="ready(false)">Не готов</button>
-                        </div>
-
-                        <div id="not-ready">
-                            <p><strong class="text-danger">Вы не готовы к игре</strong></p>
-                            <button class="btn btn-success" onclick="ready(true)" id="ready-btn">Готов</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Правая колонка (2 блока) -->
-            <div class="col-md-4">
-                <!-- Блок 4: Поиск клана -->
-                <div class="card mb-4">
-                    <div class="card-header">Поиск противника</div>
-                    <div class="card-body text-center">
-                        <select name="map" class="form-select mb-2" id="">
-                            <option value="#">Выберите карту</option>
-                            <option value="#">de_dust2</option>
-                            <option value="#">de_mirage</option>
-                            <option value="#">de_inferno</option>
-                            <option value="#">cs_italy</option>
-                        </select>
-                        <button class="btn btn-primary w-100 mb-3" id="start-search-btn">Начать поиск</button>
-                        <div id="search-timer" class="d-none">
-                            <p>Поиск противника...</p>
-                            <p><strong id="timer">00:00</strong></p>
-                        </div>
-                        <div id="found-clan-info" class="d-none">
-                            <p>Найден клан:</p>
-                            <p><strong id="clan-name">Название</strong>Клан 2</p>
-                            <p><strong>Дивизион: </strong> A</p>
-                            <p><strong>Средний рейтинг: </strong> 1.000</p>
-                            <p><strong>Девиз: </strong> Тут будет девиз клана!</p>
-                            <button type="button" onclick="window.location.href='steam://connect/37.230.228.9:27015'" class="btn btn-primary">Присоединиться к игре</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Блок 5: Общий чат -->
                 <div class="card">
                     <div class="card-header">Общий чат</div>
                     <div class="card-body">
@@ -130,7 +89,64 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary w-100">Начать групповой звонок</button>
+            </div>
+
+            <!-- Правая колонка (2 блока) -->
+            <div class="col-md-4">
+                <!-- Блок 4: Поиск клана -->
+                <div class="card mb-4">
+                    <div class="card-header">Соперник</div>
+                    <div class="card-body text-center">
+                        <div id="found-clan-info">
+                            <p><strong id="clan-name">Название: </strong><a href="{{route('clan.show', $opponent->id)}}">{{$opponent->name}}</a></p>
+                            <p><strong>Дивизион: </strong> {{$opponent->division}}</p>
+                            <p><strong>Рейтинг: </strong> {{$opponent->minimal_rating}}</p>
+                            <p><strong>Девиз: </strong> {{$opponent->motto}}</p>
+                            @php
+                                $startsInOneMinuteOrLess = !$clanWar->start_time->isPast()
+                                    && $clanWar->start_time->diffInMinutes(now(), false) >= -1;
+                            @endphp
+
+                            @if($startsInOneMinuteOrLess)
+                                <button type="button" onclick="window.location.href='steam://connect/{{$clanWar->server?->ip_address}}'" class="btn btn-primary">
+                                    Присоединиться к игре
+                                </button>
+                            @else
+                                <div class="alert alert-primary">
+                                    @if($clanWar->start_time->isPast())
+                                        <span>Матч уже начался</span>
+                                    @else
+                                        <span>Присоединиться можно будет за минуту до начала ({{ $clanWar->start_time->diffForHumans() }})</span>
+                                        <div class="mt-2">
+                                            До начала:
+                                            <span id="countdown-{{ $clanWar->id }}" class="fw-bold">
+                                                {{ gmdate('H:i:s', max(0, $clanWar->start_time->diffInSeconds(now()))) }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Блок 5: Общий чат -->
+                <div class="card">
+                    <div class="card-header">Мой статус</div>
+                    <div class="card-body text-center">
+
+                        <div id="ready" style="display: none">
+                            <p><strong class="text-success">Вы готовы к игре</strong></p>
+                            <button class="btn btn-link text-danger" onclick="ready(false)">Не готов</button>
+                        </div>
+
+                        <div id="not-ready">
+                            <p><strong class="text-danger">Вы не готовы к игре</strong></p>
+                            <button class="btn btn-success" onclick="ready(true)" id="ready-btn">Готов</button>
+                        </div>
+                    </div>
+                </div>
+{{--                <button class="btn btn-primary w-100">Начать групповой звонок</button>--}}
             </div>
         </div>
     </div>
@@ -169,26 +185,6 @@
                 clanMembersSelect.value = '';
             });
 
-            // Начать поиск
-            startSearchBtn.addEventListener('click', function () {
-                startSearchBtn.classList.add('d-none');
-                searchTimer.classList.remove('d-none');
-
-                let seconds = 0;
-                timerInterval = setInterval(() => {
-                    seconds++;
-                    const minutes = Math.floor(seconds / 60);
-                    const remainingSeconds = seconds % 60;
-                    timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-
-                    if (seconds >= 10) { // Пример: поиск завершается через 10 секунд
-                        clearInterval(timerInterval);
-                        searchTimer.classList.add('d-none');
-                        foundClanInfo.classList.remove('d-none');
-                    }
-                }, 1000);
-            });
-
             // Отправить сообщение в чат
             sendChatBtn.addEventListener('click', function () {
                 const message = chatInput.value.trim();
@@ -214,6 +210,32 @@
                 notReady.style.display = 'block';
             }
         }
+
+        function updateCountdowns() {
+            document.querySelectorAll('[id^="countdown-"]').forEach(element => {
+                const matchId = element.id.split('-')[1];
+                const endTime = new Date('{{ $clanWar->start_time->toIso8601String() }}').getTime();
+                const now = new Date().getTime();
+                let totalSeconds = Math.floor((endTime - now) / 1000);
+
+                if (totalSeconds <= 0) {
+                    element.textContent = "00:00:00";
+                    window.location.reload(); // Перезагружаем страницу по окончании таймера
+                    return;
+                }
+
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+
+                element.textContent =
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            });
+        }
+
+        // Запускаем сразу и затем каждую секунду
+        updateCountdowns();
+        setInterval(updateCountdowns, 1000);
     </script>
     @endif
 @endsection

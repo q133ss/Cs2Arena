@@ -14,6 +14,12 @@ class Clan extends Model
         return $this->belongsToMany(User::class, 'clan_members');
     }
 
+    public function matchesQuery()
+    {
+        return ClanWar::where('clan1_id', $this->id)
+            ->orWhere('clan2_id', $this->id);
+    }
+
     public function mathes()
     {
         return ClanWar::where('clan1_id', $this->id)

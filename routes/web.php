@@ -51,6 +51,7 @@ Route::redirect('/login', '/')->name('login');
 
 Route::get('/mix', [App\Http\Controllers\MixController::class, 'index'])->name('mix.index');
 Route::get('/clan-war', [App\Http\Controllers\ClanWarController::class, 'index'])->name('cw.index');
+Route::get('/clan-war/{id}', [App\Http\Controllers\ClanWarController::class, 'show'])->name('cw.show');
 Route::get('/tournaments', [App\Http\Controllers\TournamentController::class, 'index'])->name('tournament.index');
 // TODO добавить фильтрацию по рейтингу и тд
 Route::get('/clan-ratings', [App\Http\Controllers\ClanController::class, 'ratings'])->name('clan.ratings');
@@ -97,6 +98,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/friend/requests', [App\Http\Controllers\FriendshipController::class, 'friendRequests'])->name('friend.requests');
     // Битва кланов
     Route::post('clan-war/request/{clan_id}', [App\Http\Controllers\ClanWarController::class, 'request'])->name('cw.request');
+    Route::get('clan-war/accept/{clan_id}', [App\Http\Controllers\ClanWarController::class, 'accept'])->name('cw.accept');
+    Route::get('clan-war/reject/{clan_id}', [App\Http\Controllers\ClanWarController::class, 'reject'])->name('cw.reject');
 });
 
 # TODO сделать блог для SEO
